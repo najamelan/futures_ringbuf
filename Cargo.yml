@@ -31,14 +31,12 @@ features:
 
 badges:
 
-  maintenance : { status     : actively-developed }
+  maintenance : { status     : actively-developed         }
   travis-ci   : { repository : najamelan/futures_ringbuf  }
 
 
 dependencies:
 
-  # Waiting for bugfix to be rolled out
-  #
   ringbuf         : ^0.1
   futures-preview : ^0.3.0-alpha
 
@@ -55,4 +53,6 @@ patch:
 
   crates-io:
 
-    ringbuf         : { git: "https://github.com/najamelan/ringbuf.git" }
+    # Waiting for bugfix to be rolled out
+    #
+    ringbuf: { git: "https://github.com/najamelan/ringbuf.git" }
