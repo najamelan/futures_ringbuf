@@ -1,0 +1,50 @@
+package:
+
+  # When releasing to crates.io:
+  #
+  # - Update CHANGELOG.md.
+  # - Update version numbers in install section of readme and lib.rs.
+  # - merge dev branch into master
+  # - create git tag
+  #
+  version       : 0.1.0
+  name          : futures_ringbuf
+  authors       : [ Naja Melan <najamelan@autistici.org> ]
+  description   : Mock Type implementing Read/Write/AsyncRead/AsyncWrite for testing and examples.
+  documentation : https://docs.rs/futures_ringbuf
+  repository    : https://github.com/najamelan/futures_ringbuf
+  readme        : README.md
+  keywords      : [ futures, mocking, stream, testing, async ]
+  categories    : [ asynchronous, network-programming, testing ]
+  license       : Unlicense
+  edition       : "2018"
+
+  metadata:
+    docs.rs:
+      features: [ external_doc ]
+
+
+features:
+
+  external_doc: []
+
+
+badges:
+
+  maintenance : { status     : actively-developed }
+  travis-ci   : { repository : najamelan/futures_ringbuf  }
+
+
+dependencies:
+
+  log             : ^0.4
+  # ringbuf         : ^0.1
+  # ringbuf         : { git: "https://github.com/najamelan/ringbuf.git" }
+  ringbuf         : { path: ../ringbuf }
+  futures-preview : ^0.3.0-alpha
+
+
+dev-dependencies:
+
+  pretty_assertions   : ^0.6
+  futures-test-preview: ^0.3.0-alpha

@@ -1,0 +1,38 @@
+# Auto-generated from "Cargo.yml"
+[badges]
+[badges.maintenance]
+status = "actively-developed"
+
+[badges.travis-ci]
+repository = "najamelan/futures_ringbuf"
+
+[dependencies]
+futures-preview = "^0.3.0-alpha"
+log = "^0.4"
+
+[dependencies.ringbuf]
+path = "../ringbuf"
+
+[dev-dependencies]
+futures-test-preview = "^0.3.0-alpha"
+pretty_assertions = "^0.6"
+
+[features]
+external_doc = []
+
+[package]
+authors = ["Naja Melan <najamelan@autistici.org>"]
+categories = ["asynchronous", "network-programming", "testing"]
+description = "Mock Type implementing Read/Write/AsyncRead/AsyncWrite for testing and examples."
+documentation = "https://docs.rs/futures_ringbuf"
+edition = "2018"
+keywords = ["futures", "mocking", "stream", "testing", "async"]
+license = "Unlicense"
+name = "futures_ringbuf"
+readme = "README.md"
+repository = "https://github.com/najamelan/futures_ringbuf"
+version = "0.1.0"
+
+[package.metadata]
+[package.metadata."docs.rs"]
+features = ["external_doc"]
