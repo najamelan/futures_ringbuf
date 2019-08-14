@@ -8,14 +8,16 @@ repository = "najamelan/futures_ringbuf"
 
 [dependencies]
 futures-preview = "^0.3.0-alpha"
-log = "^0.4"
-
-[dependencies.ringbuf]
-path = "../ringbuf"
+ringbuf = "^0.1"
 
 [dev-dependencies]
 futures-test-preview = "^0.3.0-alpha"
+futures_codec = "^0.2"
 pretty_assertions = "^0.6"
+
+[dev-dependencies.futures-preview]
+features = ["async-await", "nightly"]
+version = "^0.3.0-alpha"
 
 [features]
 external_doc = []
@@ -36,3 +38,8 @@ version = "0.1.0"
 [package.metadata]
 [package.metadata."docs.rs"]
 features = ["external_doc"]
+
+[patch]
+[patch.crates-io]
+[patch.crates-io.ringbuf]
+git = "https://github.com/najamelan/ringbuf.git"

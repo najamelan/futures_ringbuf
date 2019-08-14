@@ -56,14 +56,15 @@ impl AsyncRead for RingBuffer<u8>
 mod tests
 {
 	// What's tested:
-	// 1. reading from full
-	// 2. reading from half full
-	// 3. reading from empty buffer
-	// 4. setting the waker
-	// 5. the waker being woken up by a write
-	// 6. reading again after a write on the empty buffer
-	// 7. reading from a closed buffer
-	// 7. reading from a closed empty buffer
+	//
+	// - ✔ reading from full
+	// - ✔ reading from half full
+	// - ✔ reading from empty buffer
+	// - ✔ setting the waker
+	// - ✔ the waker being woken up by a write
+	// - ✔ reading again after a write on the empty buffer
+	// - ✔ reading from a closed buffer
+	// - ✔ reading from a closed empty buffer
 	//
 	use crate::{ import::{ *, assert_eq }, RingBuffer };
 

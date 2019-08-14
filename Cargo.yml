@@ -37,10 +37,9 @@ badges:
 
 dependencies:
 
-  log             : ^0.4
-  # ringbuf         : ^0.1
-  # ringbuf         : { git: "https://github.com/najamelan/ringbuf.git" }
-  ringbuf         : { path: ../ringbuf }
+  # Waiting for bugfix to be rolled out
+  #
+  ringbuf         : ^0.1
   futures-preview : ^0.3.0-alpha
 
 
@@ -48,3 +47,12 @@ dev-dependencies:
 
   pretty_assertions   : ^0.6
   futures-test-preview: ^0.3.0-alpha
+  futures_codec       : ^0.2
+  futures-preview     : { version: ^0.3.0-alpha, features: [ async-await, nightly ] }
+
+
+patch:
+
+  crates-io:
+
+    ringbuf         : { git: "https://github.com/najamelan/ringbuf.git" }
