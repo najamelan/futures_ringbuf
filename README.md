@@ -171,6 +171,14 @@ or conditions.
 
 `cargo test`
 
+On wasm, after [installing wasm-pack](https://rustwasm.github.io/wasm-pack/):
+
+`wasm-pack test --firefox --headless`
+
+or
+
+`wasm-pack test --chrome --headless`
+
 ### Code of conduct
 
 Any of the behaviors described in [point 4 "Unacceptable Behavior" of the Citizens Code of Conduct](http://citizencodeofconduct.org/#unacceptable-behavior) are not welcome here and might get you banned. If anyone including maintainers and moderators of the project fail to respect these/your limits, you are entitled to call them out.
