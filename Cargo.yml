@@ -15,7 +15,7 @@ package:
   repository    : https://github.com/najamelan/futures_ringbuf
   readme        : README.md
   keywords      : [ futures, mocking, stream, testing, async ]
-  categories    : [ asynchronous, network-programming, testing ]
+  categories    : [ asynchronous, network-programming, "development-tools::testing" ]
   license       : Unlicense
   edition       : "2018"
 
