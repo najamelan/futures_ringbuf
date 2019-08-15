@@ -24,7 +24,7 @@ external_doc = []
 
 [package]
 authors = ["Naja Melan <najamelan@autistici.org>"]
-categories = ["asynchronous", "network-programming", "testing"]
+categories = ["asynchronous", "network-programming", "development-tools::testing"]
 description = "Mock Type implementing Read/Write/AsyncRead/AsyncWrite for testing and examples."
 documentation = "https://docs.rs/futures_ringbuf"
 edition = "2018"
@@ -33,7 +33,7 @@ license = "Unlicense"
 name = "futures_ringbuf"
 readme = "README.md"
 repository = "https://github.com/najamelan/futures_ringbuf"
-version = "0.1.1"
+version = "0.1.2"
 
 [package.metadata]
 [package.metadata."docs.rs"]
