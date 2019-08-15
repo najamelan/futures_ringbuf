@@ -1,6 +1,21 @@
 language: rust
 rust    : nightly
-cache   : cargo
+
+# Need to cache the whole `.cargo` directory to keep .crates.toml for
+# cargo-update to work
+#
+cache:
+  directories:
+    - /home/travis/.cargo
+
+# But don't cache the cargo registry
+# and remove wasm-pack binary to avoid the installer asking confirmation for overwriting it.
+#
+before_cache:
+  - rm -rf /home/travis/.cargo/git
+  - rm -rf /home/travis/.cargo/registry
+  - rm -rf /home/travis/.cargo/bin/wasm-pack
+
 
 branches:
   only:
@@ -16,16 +31,7 @@ matrix:
     # - rust  : stable
     #   script: cargo check
 
-
     - os: linux
-
-      # But don't cache the cargo registry
-      # and remove wasm-pack binary to avoid the installer asking confirmation for overwriting it.
-      #
-      before_cache:
-        - rm -rf /home/travis/.cargo/registry
-        - rm -rf /home/travis/.cargo/bin/wasm-pack
-
 
       # also for wasm tests
       #
