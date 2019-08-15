@@ -79,6 +79,8 @@ it can definitely be added.
 
 The requirements on `T` are `T: Sized + Copy`.
 
+If you want to seed the buffer before using it with futures_ringbuf, you can use the `Producer` and `Consumer` types of ringbuf. `futures_ringbuf::RingBuffer` implements `From< (Producer<T>, Consumer<T>) >`.
+
 ### Wasm
 
 This crate works on wasm. See the [integration test](https://github.com/najamelan/futures_ringbuf/tree/master/test/wasm.rs) for wasm for some code.
