@@ -38,3 +38,17 @@ version = "0.1.0"
 [package.metadata]
 [package.metadata."docs.rs"]
 features = ["external_doc"]
+
+[target]
+[target."cfg(target_arch = \"wasm32\")"]
+[target."cfg(target_arch = \"wasm32\")".dev-dependencies]
+wasm-bindgen = "^0.2"
+wasm-bindgen-test = "^0.2"
+
+[target."cfg(target_arch = \"wasm32\")".dev-dependencies.getrandom]
+features = ["wasm-bindgen"]
+version = "^0.1"
+
+[target."cfg(target_arch = \"wasm32\")".dev-dependencies.naja_async_runtime]
+default-features = false
+version = "^0.3"

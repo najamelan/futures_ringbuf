@@ -17,9 +17,11 @@ Data in transit is held in an internal RingBuffer from the [ringbuf crate](https
 - [Install](#install)
   - [Upgrade](#upgrade)
   - [Dependencies](#dependencies)
+  - [Security](#security)
 - [Usage](#usage)
   - [Basic Example](#basic-example)
   - [API](#api)
+  - [WASM](#wasm)
 - [Contributing](#contributing)
   - [Code of Conduct](#code-of-conduct)
 - [License](#license)
@@ -55,6 +57,12 @@ This crate has few dependiencies. Cargo will automatically handle it's dependenc
 There are no optional features.
 
 
+### Security
+
+This crate uses `#![ forbid( unsafe_code ) ]`, but it's dependencies use quite some unsafe. On first sight the unsafe usage in `ringbuf` looks sound, but I haven't scrutinized every detail of it and it's not documented.
+A lot of unsafe code is present in the futures library, which I haven't reviewed.
+
+
 ## Usage
 
 The crate provides a `RingBuffer<T>` struct which implements `AsyncRead`/`AsyncWrite` from the futures library
@@ -70,6 +78,10 @@ I haven't yet included `Stream<T>`, `Sink<T>`, because on `u8` that doesn't make
 it can definitely be added.
 
 The requirements on `T` are `T: Sized + Copy`.
+
+### Wasm
+
+This crate works on wasm. See the [integration test](https://github.com/najamelan/futures_ringbuf/tree/master/test/wasm.rs) for wasm for some code.
 
 
 ### Basic example
