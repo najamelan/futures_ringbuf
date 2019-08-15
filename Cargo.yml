@@ -31,14 +31,12 @@ features:
 
 badges:
 
-  maintenance : { status     : actively-developed }
+  maintenance : { status     : actively-developed         }
   travis-ci   : { repository : najamelan/futures_ringbuf  }
 
 
 dependencies:
 
-  # Waiting for bugfix to be rolled out
-  #
   ringbuf         : ^0.1
   futures-preview : ^0.3.0-alpha
 
@@ -51,8 +49,13 @@ dev-dependencies:
   futures-preview     : { version: ^0.3.0-alpha, features: [ async-await, nightly ] }
 
 
-patch:
+target:
 
-  crates-io:
+  'cfg(target_arch = "wasm32")':
 
-    ringbuf         : { git: "https://github.com/najamelan/ringbuf.git" }
+    dev-dependencies:
+
+      wasm-bindgen       : ^0.2
+      wasm-bindgen-test  : ^0.2
+      getrandom          : { version: ^0.1, features: [ wasm-bindgen ] }
+      naja_async_runtime : { version: ^0.3, default-features: false    }

@@ -1,0 +1,107 @@
+language: rust
+rust    : nightly
+cache   : cargo
+
+branches:
+  only:
+    - master
+    - dev
+
+matrix:
+
+  include:
+
+    # This won't work because we use a nightly feature in dev-dependencies and the feature leaks:
+    #
+    # - rust  : stable
+    #   script: cargo check
+
+
+    - os: linux
+
+      # But don't cache the cargo registry
+      # and remove wasm-pack binary to avoid the installer asking confirmation for overwriting it.
+      #
+      before_cache:
+        - rm -rf /home/travis/.cargo/registry
+        - rm -rf /home/travis/.cargo/bin/wasm-pack
+
+
+      # For apt install packages
+      #
+      sudo: required
+
+
+      addons:
+
+        # for wasm tests
+        #
+        firefox: latest
+
+        # lately chrome has been systematically failing in CI. I should look into why that is,
+        # but for now, turn it off, since it doesn't allow us to finish the build.
+        #
+        # chrome : stable
+
+        # for code coverage
+        #
+        apt:
+
+          packages:
+            - libcurl4-openssl-dev
+            - libelf-dev
+            - libdw-dev
+            - cmake
+            - gcc
+            - binutils-dev
+            - libiberty-dev
+
+      # also for wasm tests
+      #
+      install:
+        - curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+
+      script:
+        - cargo test
+        - cargo test --release
+        - cargo doc --no-deps
+
+        - wasm-pack test  --firefox --headless
+        - wasm-pack test  --chrome  --headless
+
+        - wasm-pack test  --firefox --headless --release
+
+        # temp disabled, see comment above
+        #
+        # - wasm-pack test  --chrome  --headless --release
+
+
+      after_success: |
+        wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz &&
+        tar xzf master.tar.gz &&
+        cd kcov-master &&
+        mkdir build &&
+        cd build &&
+        cmake .. &&
+        make &&
+        make install DESTDIR=../../kcov-build &&
+        cd ../.. &&
+        rm -rf kcov-master &&
+        for file in target/debug/futures_ringbuf-*[^\.d]; do mkdir -p "target/cov/$(basename $file)"; ./kcov-build/usr/local/bin/kcov --exclude-pattern=/.cargo,/usr/lib --verify "target/cov/$(basename $file)" "$file"; done &&
+        bash <(curl -s https://codecov.io/bash) &&
+        echo "Uploaded code coverage"
+
+
+    - os    : osx
+      script:
+        - cargo test
+        - cargo test --release
+
+
+    - os    : windows
+      script:
+        - cargo test
+        - cargo test --release
+
+
