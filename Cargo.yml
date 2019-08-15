@@ -47,12 +47,3 @@ dev-dependencies:
   futures-test-preview: ^0.3.0-alpha
   futures_codec       : ^0.2
   futures-preview     : { version: ^0.3.0-alpha, features: [ async-await, nightly ] }
-
-
-patch:
-
-  crates-io:
-
-    # Waiting for bugfix to be rolled out
-    #
-    ringbuf: { git: "https://github.com/najamelan/ringbuf.git" }

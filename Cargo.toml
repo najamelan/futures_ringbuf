@@ -19,13 +19,12 @@ pretty_assertions = "^0.6"
 features = ["async-await", "nightly"]
 version = "^0.3.0-alpha"
 
-
 [features]
 external_doc = []
 
 [package]
 authors = ["Naja Melan <najamelan@autistici.org>"]
-categories = ["asynchronous", "network-programming", "development-tools::testing"]
+categories = ["asynchronous", "network-programming", "testing"]
 description = "Mock Type implementing Read/Write/AsyncRead/AsyncWrite for testing and examples."
 documentation = "https://docs.rs/futures_ringbuf"
 edition = "2018"
@@ -39,8 +38,3 @@ version = "0.1.0"
 [package.metadata]
 [package.metadata."docs.rs"]
 features = ["external_doc"]
-
-[patch]
-[patch.crates-io]
-[patch.crates-io.ringbuf]
-git = "https://github.com/najamelan/ringbuf.git"
