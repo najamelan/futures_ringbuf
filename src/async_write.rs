@@ -8,7 +8,7 @@ impl AsyncWrite for RingBuffer<u8>
 	/// when new place is made.
 	/// This method returns a `io::ErrorKind::NotConnected` error if called after `poll_close`.
 	//
-	fn poll_write( mut self: Pin<&mut Self>, cx: &mut Context, src: &[u8] ) -> Poll< Result<usize, io::Error> >
+	fn poll_write( mut self: Pin<&mut Self>, cx: &mut Context<'_>, src: &[u8] ) -> Poll< Result<usize, io::Error> >
 	{
 		if self.closed { return Err( io::ErrorKind::NotConnected.into() ).into() }
 
@@ -43,7 +43,7 @@ impl AsyncWrite for RingBuffer<u8>
 	/// We are always flushed, this is a noop.
 	/// This method is infallible.
 	//
-	fn poll_flush( self: Pin<&mut Self>, _cx: &mut Context ) -> Poll< Result<(), io::Error> >
+	fn poll_flush( self: Pin<&mut Self>, _cx: &mut Context<'_> ) -> Poll< Result<(), io::Error> >
 	{
 		Ok(()).into()
 	}
@@ -52,7 +52,7 @@ impl AsyncWrite for RingBuffer<u8>
 	/// Closes the stream. After this no more data can be send into it.
 	/// This method is infallible.
 	//
-	fn poll_close( mut self: Pin<&mut Self>, _cx: &mut Context ) -> Poll< Result<(), io::Error> >
+	fn poll_close( mut self: Pin<&mut Self>, _cx: &mut Context<'_> ) -> Poll< Result<(), io::Error> >
 	{
 		self.closed = true;
 		Ok(()).into()

@@ -11,6 +11,14 @@
 #![ forbid ( unsafe_code                                       ) ]
 #![ allow  ( clippy::suspicious_else_formatting                ) ]
 
+#![ warn
+(
+	missing_debug_implementations ,
+	missing_docs                  ,
+	nonstandard_style             ,
+	rust_2018_idioms              ,
+)]
+
 
 mod ring_buffer ;
 mod async_read  ;

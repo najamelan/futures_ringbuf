@@ -10,7 +10,7 @@ impl AsyncRead for RingBuffer<u8>
 	///
 	/// This method is infallible.
 	//
-	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context, dst: &mut [u8] ) -> Poll< Result<usize, io::Error> >
+	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, dst: &mut [u8] ) -> Poll< Result<usize, io::Error> >
 	{
 		match self.consumer.pop_slice( dst )
 		{
