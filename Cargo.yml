@@ -3,7 +3,10 @@ package:
   # When releasing to crates.io:
   #
   # - Update CHANGELOG.md.
-  # - Update version numbers in install section of readme and lib.rs.
+  # - Update version numbers in Cargo.yml, Cargo.toml, install section of readme.
+  # - verify CI result
+  # - test dependent crates
+  # - cargo publish
   # - merge dev branch into master
   # - create git tag
   #
@@ -58,4 +61,4 @@ target:
       wasm-bindgen       : ^0.2
       wasm-bindgen-test  : ^0.2
       getrandom          : { version: ^0.1, features: [ wasm-bindgen ] }
-      naja_async_runtime : { version: ^0.3, default-features: false    }
+      wasm-bindgen-futures : { version: ^0.3, features: [ futures_0_3  ] }
