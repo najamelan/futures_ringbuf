@@ -33,7 +33,7 @@ matrix:
 
     - os: linux
 
-      # also for wasm tests
+      # for wasm tests
       #
       install:
         - curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh

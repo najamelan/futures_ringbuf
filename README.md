@@ -94,9 +94,6 @@ This crate works on wasm. See the [integration test](https://github.com/najamela
 //!
 //! Run with `cargo run --example basic`.
 //
-#![feature(async_await)]
-
-
 use
 {
    futures_ringbuf :: { *                                            } ,

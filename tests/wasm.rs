@@ -1,5 +1,4 @@
 #![ cfg( target_arch = "wasm32" )]
-#![ feature( async_await )]
 
 
 // Verify basic functionality on wasm
