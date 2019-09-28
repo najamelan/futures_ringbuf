@@ -6,10 +6,17 @@
 
 
 #![ doc    ( html_root_url = "https://docs.rs/futures_ringbuf" ) ]
-#![ feature( async_await                                       ) ]
 #![ deny   ( missing_docs                                      ) ]
 #![ forbid ( unsafe_code                                       ) ]
 #![ allow  ( clippy::suspicious_else_formatting                ) ]
+
+#![ warn
+(
+	missing_debug_implementations ,
+	missing_docs                  ,
+	nonstandard_style             ,
+	rust_2018_idioms              ,
+)]
 
 
 mod ring_buffer ;

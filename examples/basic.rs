@@ -3,8 +3,6 @@
 //!
 //! Run with `cargo run --example basic`.
 //
-#![feature(async_await)]
-
 use
 {
 	futures_ringbuf :: { *                                            } ,

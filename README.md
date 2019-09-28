@@ -15,15 +15,15 @@ Data in transit is held in an internal RingBuffer from the [ringbuf crate](https
 ## Table of Contents
 
 - [Install](#install)
-  - [Upgrade](#upgrade)
-  - [Dependencies](#dependencies)
-  - [Security](#security)
+   - [Upgrade](#upgrade)
+   - [Dependencies](#dependencies)
+   - [Security](#security)
 - [Usage](#usage)
-  - [Basic Example](#basic-example)
-  - [API](#api)
-  - [WASM](#wasm)
+   - [Basic Example](#basic-example)
+   - [API](#api)
+   - [WASM](#wasm)
 - [Contributing](#contributing)
-  - [Code of Conduct](#code-of-conduct)
+   - [Code of Conduct](#code-of-conduct)
 - [License](#license)
 
 
@@ -35,14 +35,14 @@ With [cargo yaml](https://gitlab.com/storedbox/cargo-yaml):
 ```yaml
 dependencies:
 
-  futures_ringbuf: ^0.1
+   futures_ringbuf: ^0.1
 ```
 
 With raw Cargo.toml
 ```toml
 [dependencies]
 
-   futures_ringbuf = "^0.1"
+    futures_ringbuf = "^0.1"
 ```
 
 ### Upgrade
@@ -94,9 +94,6 @@ This crate works on wasm. See the [integration test](https://github.com/najamela
 //!
 //! Run with `cargo run --example basic`.
 //
-#![feature(async_await)]
-
-
 use
 {
    futures_ringbuf :: { *                                            } ,
@@ -109,40 +106,40 @@ fn main()
 {
    let program = async
    {
-      let mock = RingBuffer::new( 13 );
-      let (mut writer, mut reader) = Framed::new( mock, LinesCodec{} ).split();
+         let mock = RingBuffer::new( 13 );
+         let (mut writer, mut reader) = Framed::new( mock, LinesCodec{} ).split();
 
 
-      let send_task = async move
-      {
-         writer.send( "Hello World\n".to_string() ).await.expect( "send" );
-         println!( "sent first line" );
-
-         writer.send( "Second line\n".to_string() ).await.expect( "send" );
-         println!( "sent second line" );
-
-         writer.close().await.expect( "close sender" );
-         println!( "sink closed" );
-      };
-
-
-      let receive_task = async move
-      {
-         // If we would return here, the second line will never get sent
-         // because the buffer is full.
-         //
-         // return;
-
-         while let Some(msg) = reader.next().await.transpose().expect( "receive message" )
+         let send_task = async move
          {
-            println!( "Received: {:#?}", msg );
-         }
-      };
+            writer.send( "Hello World\n".to_string() ).await.expect( "send" );
+            println!( "sent first line" );
+
+            writer.send( "Second line\n".to_string() ).await.expect( "send" );
+            println!( "sent second line" );
+
+            writer.close().await.expect( "close sender" );
+            println!( "sink closed" );
+         };
 
 
-      // Poll them in concurrently
-      //
-      join!( send_task, receive_task );
+         let receive_task = async move
+         {
+            // If we would return here, the second line will never get sent
+            // because the buffer is full.
+            //
+            // return;
+
+            while let Some(msg) = reader.next().await.transpose().expect( "receive message" )
+            {
+                  println!( "Received: {:#?}", msg );
+            }
+         };
+
+
+         // Poll them in concurrently
+         //
+         join!( send_task, receive_task );
    };
 
    block_on( program );
@@ -162,14 +159,17 @@ Pull Requests are welcome on github. By commiting pull requests, you accept that
 
 Please file PR's against the `dev` branch, don't forget to update the changelog and the documentation.
 
-Unless you explicitly state otherwise, any contribution intentionally
-submitted for inclusion in the work by you, as defined in the Apache-2.0
-license, shall be dual licensed as above, without any additional terms
-or conditions.
-
 ### Testing
 
 `cargo test`
+
+On wasm, after [installing wasm-pack](https://rustwasm.github.io/wasm-pack/):
+
+`wasm-pack test --firefox --headless`
+
+or
+
+`wasm-pack test --chrome --headless`
 
 ### Code of conduct
 
