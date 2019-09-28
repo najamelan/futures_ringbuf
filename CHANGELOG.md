@@ -1,5 +1,10 @@
 # futures_ringbuf
 
+## 0.1.4 - 2019-09-29
+
+- cleanup readme
+- fix wasm tests
+
 ## 0.1.3 - 2019-09-28
 
 - update dependencies
