@@ -159,11 +159,6 @@ Pull Requests are welcome on github. By commiting pull requests, you accept that
 
 Please file PR's against the `dev` branch, don't forget to update the changelog and the documentation.
 
-Unless you explicitly state otherwise, any contribution intentionally
-submitted for inclusion in the work by you, as defined in the Apache-2.0
-license, shall be dual licensed as above, without any additional terms
-or conditions.
-
 ### Testing
 
 `cargo test`

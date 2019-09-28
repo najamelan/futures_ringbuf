@@ -23,8 +23,9 @@ package:
   edition       : "2018"
 
   metadata:
-    docs.rs:
-      features: [ external_doc ]
+    docs:
+      rs:
+        features: [ external_doc ]
 
 
 features:
@@ -48,8 +49,8 @@ dev-dependencies:
 
   pretty_assertions   : ^0.6
   futures-test-preview: ^0.3.0-alpha
-  futures_codec       : ^0.2
-  futures-preview     : { version: ^0.3.0-alpha, features: [ async-await, nightly ] }
+  futures_codec       : ^0.3
+  futures-preview     : { version: ^0.3.0-alpha, features: [ async-await ] }
 
 
 target:
@@ -58,7 +59,7 @@ target:
 
     dev-dependencies:
 
-      wasm-bindgen       : ^0.2
-      wasm-bindgen-test  : ^0.2
-      getrandom          : { version: ^0.1, features: [ wasm-bindgen ] }
-      wasm-bindgen-futures : { version: ^0.3, features: [ futures_0_3  ] }
+      wasm-bindgen         : ^0.2
+      wasm-bindgen-test    : ^0.2
+      wasm-bindgen-futures : { version: ^0.4 }
+
