@@ -6,7 +6,7 @@
 [![crates.io](https://img.shields.io/crates/v/futures_ringbuf.svg)](https://crates.io/crates/futures_ringbuf)
 
 
-> A fake async network stream for testing and examples without having to do tcp.
+> A fake async network stream for testing and examples without having to do TCP.
 
 It acts like both ends of a network connection. You can think of it like the network connection to an echo server. You can frame it with [futures_codec](https://crates.io/crates/futures_codec), split it to get both halves separately and send and receive messages on it. You can use this in testing and examples to avoid having to make actual TCP connections.
 
@@ -52,7 +52,7 @@ Please check out the [changelog](https://github.com/najamelan/futures_ringbuf/bl
 
 ### Dependencies
 
-This crate has few dependiencies. Cargo will automatically handle it's dependencies for you.
+This crate has few dependencies. Cargo will automatically handle it's dependencies for you.
 
 There are no optional features.
 
@@ -69,7 +69,7 @@ The crate provides a `RingBuffer<T>` struct which implements `AsyncRead`/`AsyncW
 when `T` is u8. You can now call `split` provided by `AsyncRead` and treat them as both ends of a network connection.
 
 The reader will return `Poll::Pending` when the buffer is empty, and the writer when the buffer is full. They will
-wake eachother up when new data/space is available.
+wake each other up when new data/space is available.
 
 If you want to play with `std::io::Read`/`std::io::Write`, check out the `ringbuf` crate directly, as it's `Producer` and
 `Consumer` types implement these traits, so I didn't include them here.
@@ -81,9 +81,9 @@ The requirements on `T` are `T: Sized + Copy`.
 
 If you want to seed the buffer before using it with futures_ringbuf, you can use the `Producer` and `Consumer` types of ringbuf. `futures_ringbuf::RingBuffer` implements `From< (Producer<T>, Consumer<T>) >`.
 
-### Wasm
+### WASM
 
-This crate works on wasm. See the [integration test](https://github.com/najamelan/futures_ringbuf/tree/master/test/wasm.rs) for wasm for some code.
+This crate works on WASM. See the [integration test](https://github.com/najamelan/futures_ringbuf/tree/master/test/wasm.rs) for WASM for some code.
 
 
 ### Basic example
@@ -132,7 +132,7 @@ fn main()
 
             while let Some(msg) = reader.next().await.transpose().expect( "receive message" )
             {
-                  println!( "Received: {:#?}", msg );
+               println!( "Received: {:#?}", msg );
             }
          };
 
@@ -148,14 +148,14 @@ fn main()
 
 ## API
 
-Api documentation can be found on [docs.rs](https://docs.rs/futures_ringbuf).
+API documentation can be found on [docs.rs](https://docs.rs/futures_ringbuf).
 
 
 ## Contributing
 
 This repository accepts contributions. Ideas, questions, feature requests and bug reports can be filed through github issues.
 
-Pull Requests are welcome on github. By commiting pull requests, you accept that your code might be modified and reformatted to fit the project coding style or to improve the implementation. Please discuss what you want to see modified before filing a pull request if you don't want to be doing work that might be rejected.
+Pull Requests are welcome on Github. By committing pull requests, you accept that your code might be modified and reformatted to fit the project coding style or to improve the implementation. Please discuss what you want to see modified before filing a pull request if you don't want to be doing work that might be rejected.
 
 Please file PR's against the `dev` branch, don't forget to update the changelog and the documentation.
 
@@ -163,7 +163,7 @@ Please file PR's against the `dev` branch, don't forget to update the changelog 
 
 `cargo test`
 
-On wasm, after [installing wasm-pack](https://rustwasm.github.io/wasm-pack/):
+On WASM, after [installing wasm-pack](https://rustwasm.github.io/wasm-pack/):
 
 `wasm-pack test --firefox --headless`
 
