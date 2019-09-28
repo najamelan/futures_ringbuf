@@ -1,5 +1,10 @@
 # futures_ringbuf
 
+## 0.1.3 - 2019-09-28
+
+- update dependencies
+- fix docs.rs readme
+
 ## 0.1.2 - 2019-08-15
 
 - fix category slug that was lost in git history
