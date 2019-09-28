@@ -10,7 +10,7 @@
 use
 {
 	wasm_bindgen_test    :: { *                                 } ,
-	wasm_bindgen_futures :: { futures_0_3::spawn_local          } ,
+	wasm_bindgen_futures :: { spawn_local                       } ,
 	futures_ringbuf      :: { *                                 } ,
 	futures              :: { SinkExt, StreamExt, future::ready } ,
 	futures_codec        :: { Framed, LinesCodec                } ,
