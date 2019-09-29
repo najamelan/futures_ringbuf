@@ -28,10 +28,12 @@
 mod ring_buffer ;
 mod async_read  ;
 mod async_write ;
+mod endpoint    ;
 
 pub use self::ring_buffer ::* ;
 pub use async_read        ::* ;
 pub use async_write       ::* ;
+pub use endpoint          ::* ;
 
 
 
@@ -41,9 +43,9 @@ mod import
 {
 	pub(crate) use
 	{
-		std     :: { io, fmt, pin::Pin, task::{ Context, Poll, Waker } } ,
-		ringbuf :: { RingBuffer as SyncRingBuffer, Producer, Consumer  } ,
-		futures :: { AsyncRead, AsyncWrite                             } ,
+		std     :: { io, fmt, pin::Pin, task::{ Context, Poll, Waker }                } ,
+		ringbuf :: { RingBuffer as SyncRingBuffer, Producer, Consumer                 } ,
+		futures :: { AsyncRead, AsyncWrite, io::{ ReadHalf, WriteHalf, AsyncReadExt } } ,
 	};
 
 
@@ -51,9 +53,9 @@ mod import
 	//
 	pub(crate) use
 	{
-		pretty_assertions :: { assert_eq                                       } ,
-		futures           :: { AsyncReadExt, AsyncWriteExt, executor::block_on } ,
-		futures_test      :: { task::{ new_count_waker }                       } ,
+		pretty_assertions :: { assert_eq                         } ,
+		futures           :: { AsyncWriteExt, executor::block_on } ,
+		futures_test      :: { task::{ new_count_waker }         } ,
 	};
 }
 
