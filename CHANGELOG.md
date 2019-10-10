@@ -1,5 +1,9 @@
 # futures_ringbuf
 
+## 0.1.5 - 2019-10-10
+
+- Add Endpoint to mock full duplex connection.
+
 ## 0.1.4 - 2019-09-29
 
 - cleanup readme
