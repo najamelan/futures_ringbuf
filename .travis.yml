@@ -42,7 +42,7 @@ matrix:
       script:
         - cargo test
         - cargo test --release
-        - cargo doc --no-deps
+        - cargo doc --no-deps --all-features
 
         - wasm-pack test  --firefox --headless
         - wasm-pack test  --chrome  --headless
