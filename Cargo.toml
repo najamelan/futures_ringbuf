@@ -11,6 +11,8 @@ futures-preview = "^0.3.0-alpha"
 ringbuf = "^0.1"
 
 [dev-dependencies]
+assert_matches = "^1"
+ergo-pin = "^0.1"
 futures-test-preview = "^0.3.0-alpha"
 futures_codec = "^0.3"
 pretty_assertions = "^0.6"

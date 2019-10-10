@@ -51,6 +51,9 @@ dev-dependencies:
   futures-test-preview: ^0.3.0-alpha
   futures_codec       : ^0.3
   futures-preview     : { version: ^0.3.0-alpha, features: [ async-await ] }
+  assert_matches      : ^1
+  ergo-pin            : ^0.1
+  futures-test-preview: ^0.3.0-alpha
 
 
 target:
