@@ -12,6 +12,10 @@ use crate::{ import::*, RingBuffer };
 ///
 /// By setting the buffer size precisely, one can simulate back pressure. Endpoint will return Pending on writes
 /// when full and on reads when empty.
+///
+/// When calling close on an endpoint, any further writes on that endpoint will return [`std::io::ErrorKind::NotConnected`]
+/// and any reads on the other endpoint will continue to empty the buffer and then return `Ok(0)`. `Ok(0)` means
+/// no new data will ever appear, unless you passed in a zero sized buffer.
 //
 #[ derive( Debug ) ]
 //

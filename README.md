@@ -6,9 +6,15 @@
 [![crates.io](https://img.shields.io/crates/v/futures_ringbuf.svg)](https://crates.io/crates/futures_ringbuf)
 
 
-> A fake async network stream for testing and examples without having to do TCP.
+> A ringbuffer that implements AsyncRead/AsyncWrite.
 
-It acts like both ends of a network connection. You can think of it like the network connection to an echo server. You can frame it with [futures_codec](https://crates.io/crates/futures_codec), split it to get both halves separately and send and receive messages on it. You can use this in testing and examples to avoid having to make actual TCP connections.
+It can be used for testing async network crates cross platform without having to make TCP connections. The crate also
+provides a type Endpoint which allows creating both ends of a fake network stream with a ringbuffer in each direction.
+It also facilitates testing more complex situations like back pressure.
+
+It can also be used as an in memory buffer for communicating between async tasks. I haven't done benchmarks yet.
+
+There are currently 2 versions of the AsyncRead/Write traits. The _futures-rs_ version and the _tokio_ version. This crate implements the _futures-rs_ version only for now. We will see how the ecosystem evolves and adapt. This means you can frame the RingBuffer or the Endpoint connection with the [`futures-codec`](https://crates.io/crates/futures_codec) crate. You can send arbitrary rust structs using [`futures_cbor_codec`](https://crates.io/crates/futures_cbor_codec). Know that the interface of _futures-codec_ is identical to the _tokio-codec_ one, so converting a codec is trivial.
 
 Data in transit is held in an internal RingBuffer from the [ringbuf crate](https://crates.io/crates/ringbuf).
 
@@ -21,6 +27,7 @@ Data in transit is held in an internal RingBuffer from the [ringbuf crate](https
 - [Usage](#usage)
    - [WASM](#wasm)
    - [Basic Example](#basic-example)
+   - [Endpoint Example](#endpoint-example)
 - [API](#api)
 - [Contributing](#contributing)
    - [Code of Conduct](#code-of-conduct)
@@ -80,6 +87,7 @@ it can definitely be added.
 The requirements on `T` are `T: Sized + Copy`.
 
 If you want to seed the buffer before using it with futures_ringbuf, you can use the `Producer` and `Consumer` types of ringbuf. `futures_ringbuf::RingBuffer` implements `From< (Producer<T>, Consumer<T>) >`.
+
 
 ### WASM
 
@@ -146,6 +154,36 @@ fn main()
 }
 ```
 
+### Endpoint example
+
+```rust
+use
+{
+   futures_ringbuf :: { *                                               } ,
+   futures         :: { AsyncWriteExt, AsyncReadExt, executor::block_on } ,
+};
+
+
+fn main() { block_on( async
+{
+   // Buffer of 10 bytes in each direction.
+   // When it's full it will return pending on writing and when it's empty it returns
+   // pending on reading.
+   //
+   let (mut server, mut client) = Endpoint::pair( 10, 10 );
+
+   let     data = vec![ 1,2,3 ];
+   let mut read = [0u8;3];
+
+   server.write( &data ).await.expect( "write" );
+
+   let n = client.read( &mut read ).await.expect( "read" );
+   assert_eq!( n   , 3                 );
+   assert_eq!( read, vec![ 1,2,3 ][..] );
+})}
+```
+
+
 ## API
 
 API documentation can be found on [docs.rs](https://docs.rs/futures_ringbuf).
@@ -153,7 +191,7 @@ API documentation can be found on [docs.rs](https://docs.rs/futures_ringbuf).
 
 ## Contributing
 
-This repository accepts contributions. Ideas, questions, feature requests and bug reports can be filed through github issues.
+This repository accepts contributions. Ideas, questions, feature requests and bug reports can be filed through Github issues.
 
 Pull Requests are welcome on Github. By committing pull requests, you accept that your code might be modified and reformatted to fit the project coding style or to improve the implementation. Please discuss what you want to see modified before filing a pull request if you don't want to be doing work that might be rejected.
 

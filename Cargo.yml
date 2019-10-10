@@ -30,6 +30,8 @@ package:
 
 features:
 
+  # For internal use only. Enables integrating the README.md in rustdoc documentation.
+  #
   external_doc: []
 
 
