@@ -16,7 +16,7 @@ impl AsyncRead for RingBuffer<u8>
 		{
 			Ok(n) =>
 			{
-				// If a writer is waiting for place in the buffer, wake them
+				// If a writer is waiting for place in the buffer, wake them.
 				//
 				if let Some(waker) = self.write_waker.take()
 				{
@@ -26,6 +26,8 @@ impl AsyncRead for RingBuffer<u8>
 				Poll::Ready( Ok(n) )
 			}
 
+			// Will return Empty as an error if the buffer is empty.
+			//
 			Err(_) =>
 			{
 				if self.closed

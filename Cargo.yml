@@ -10,7 +10,7 @@ package:
   # - merge dev branch into master
   # - create git tag
   #
-  version       : 0.1.4
+  version       : 0.1.5
   name          : futures_ringbuf
   authors       : [ Naja Melan <najamelan@autistici.org> ]
   description   : Mock Type implementing Read/Write/AsyncRead/AsyncWrite for testing and examples.
@@ -30,6 +30,8 @@ package:
 
 features:
 
+  # For internal use only. Enables integrating the README.md in rustdoc documentation.
+  #
   external_doc: []
 
 
@@ -51,6 +53,9 @@ dev-dependencies:
   futures-test-preview: ^0.3.0-alpha
   futures_codec       : ^0.3
   futures-preview     : { version: ^0.3.0-alpha, features: [ async-await ] }
+  assert_matches      : ^1
+  ergo-pin            : ^0.1
+  futures-test-preview: ^0.3.0-alpha
 
 
 target:
