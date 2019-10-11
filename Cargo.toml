@@ -27,7 +27,7 @@ external_doc = []
 [package]
 authors = ["Naja Melan <najamelan@autistici.org>"]
 categories = ["asynchronous", "network-programming", "development-tools::testing"]
-description = "Mock Type implementing Read/Write/AsyncRead/AsyncWrite for testing and examples."
+description = "Mock Type implementing AsyncRead/AsyncWrite for testing and examples."
 documentation = "https://docs.rs/futures_ringbuf"
 edition = "2018"
 keywords = ["futures", "mocking", "stream", "testing", "async"]

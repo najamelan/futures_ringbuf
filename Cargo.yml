@@ -13,7 +13,7 @@ package:
   version       : 0.1.5
   name          : futures_ringbuf
   authors       : [ Naja Melan <najamelan@autistici.org> ]
-  description   : Mock Type implementing Read/Write/AsyncRead/AsyncWrite for testing and examples.
+  description   : Mock Type implementing AsyncRead/AsyncWrite for testing and examples.
   documentation : https://docs.rs/futures_ringbuf
   repository    : https://github.com/najamelan/futures_ringbuf
   readme        : README.md
