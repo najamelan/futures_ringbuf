@@ -8,9 +8,8 @@
 
 > A ringbuffer that implements AsyncRead/AsyncWrite.
 
-It can be used for testing async network crates cross platform without having to make TCP connections. The crate also
-provides a type Endpoint which allows creating both ends of a fake network stream with a ringbuffer in each direction.
-It also facilitates testing more complex situations like back pressure.
+It can be used for testing async network crates cross platform without having to make TCP connections. The crate provides a type `Endpoint` which allows creating both ends of a fake network stream with a ringbuffer in each direction.
+It facilitates testing more complex situations like back pressure.
 
 It can also be used as an in memory buffer for communicating between async tasks. I haven't done benchmarks yet.
 
@@ -154,6 +153,14 @@ fn main()
 }
 ```
 
+
+### Endpoint
+
+When using one ringbuffer, we get both ends of one connection. If we want a more realistic duplex connection, we
+need two ringbuffers, with one endpoint reading from the ringbuffer the other endpoint is writing to. Tasks need
+to be woken up correctly when new data or space becomes available... To facilitate this, an `Endpoint` type is provided which will take care of this setup for you.
+
+
 ### Endpoint example
 
 ```rust
@@ -166,7 +173,8 @@ use
 
 fn main() { block_on( async
 {
-   // Buffer of 10 bytes in each direction.
+   // Buffer of 10 bytes in each direction. The buffer size always refers to the writing side, so here
+   // the first 10 means the server can write 10 bytes before it's buffer is full.
    // When it's full it will return pending on writing and when it's empty it returns
    // pending on reading.
    //
@@ -178,6 +186,7 @@ fn main() { block_on( async
    server.write( &data ).await.expect( "write" );
 
    let n = client.read( &mut read ).await.expect( "read" );
+
    assert_eq!( n   , 3                 );
    assert_eq!( read, vec![ 1,2,3 ][..] );
 })}
