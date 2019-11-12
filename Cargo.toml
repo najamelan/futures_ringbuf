@@ -7,19 +7,15 @@ status = "actively-developed"
 repository = "najamelan/futures_ringbuf"
 
 [dependencies]
-futures-preview = "^0.3.0-alpha"
+futures = "^0.3.0"
 ringbuf = "^0.1"
 
 [dev-dependencies]
 assert_matches = "^1"
 ergo-pin = "^0.1"
-futures-test-preview = "^0.3.0-alpha"
+futures-test = "^0.3.0"
 futures_codec = "^0.3"
 pretty_assertions = "^0.6"
-
-[dev-dependencies.futures-preview]
-features = ["async-await"]
-version = "^0.3.0-alpha"
 
 [features]
 external_doc = []
@@ -35,7 +31,7 @@ license = "Unlicense"
 name = "futures_ringbuf"
 readme = "README.md"
 repository = "https://github.com/najamelan/futures_ringbuf"
-version = "0.1.5"
+version = "0.1.6"
 
 [package.metadata]
 [package.metadata.docs]
