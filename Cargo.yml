@@ -10,10 +10,10 @@ package:
   # - merge dev branch into master
   # - create git tag
   #
-  version       : 0.1.5
+  version       : 0.1.6
   name          : futures_ringbuf
   authors       : [ Naja Melan <najamelan@autistici.org> ]
-  description   : Mock Type implementing Read/Write/AsyncRead/AsyncWrite for testing and examples.
+  description   : Mock Type implementing AsyncRead/AsyncWrite for testing and examples.
   documentation : https://docs.rs/futures_ringbuf
   repository    : https://github.com/najamelan/futures_ringbuf
   readme        : README.md
@@ -43,19 +43,16 @@ badges:
 
 dependencies:
 
-  ringbuf         : ^0.1
-  futures-preview : ^0.3.0-alpha
-
+  ringbuf: ^0.1
+  futures: ^0.3.0
 
 dev-dependencies:
 
   pretty_assertions   : ^0.6
-  futures-test-preview: ^0.3.0-alpha
+  futures-test        : ^0.3.0
   futures_codec       : ^0.3
-  futures-preview     : { version: ^0.3.0-alpha, features: [ async-await ] }
   assert_matches      : ^1
   ergo-pin            : ^0.1
-  futures-test-preview: ^0.3.0-alpha
 
 
 target:

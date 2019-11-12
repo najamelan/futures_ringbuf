@@ -1,5 +1,10 @@
 # futures_ringbuf
 
+## 0.1.6 - 2019-10-10
+
+- Update to futures 0.3.
+- Test on stable as well as nightly.
+
 ## 0.1.5 - 2019-10-10
 
 - Add Endpoint to mock full duplex connection.
