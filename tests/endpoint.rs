@@ -1,14 +1,18 @@
 // Tested:
 //
-// - ✔ basic sending and receiving
-// - ✔ try to read after close
-// - ✔ try to write after close
-// - ✔ read remaining data after close
+// ✔ basic sending and receiving
+// ✔ try to read after close
+// ✔ try to write after close
+// ✔ read remaining data after close
+// ✔ wake up pending reader after call to close
+// - wake up pending reader after drop (requires an async drop)
 //
 use
 {
 	futures_ringbuf :: { *                                                                      } ,
+	futures_codec   :: { Framed, LinesCodec                                                     } ,
 	futures         :: { AsyncRead, AsyncWrite, AsyncWriteExt, AsyncReadExt, executor::block_on } ,
+	futures         :: { future::join, SinkExt, StreamExt                                       } ,
 	futures_test    :: { task::noop_waker                                                       } ,
 	assert_matches  :: { assert_matches                                                         } ,
 	std             :: { task::{ Poll, Context }                                                } ,
@@ -107,3 +111,32 @@ fn close_read_remaining() { block_on( async
 	assert_eq!( n   , 0        );
 	assert_eq!( read2, [0u8;3] );
 })}
+
+
+
+#[ test ]
+//
+fn close_wake_pending()
+{
+	let (server, client) = Endpoint::pair( 10, 10 );
+
+	let svr = async move
+	{
+		let (mut sink, _stream) = Framed::new( server, LinesCodec{} ).split();
+
+		sink.send( "a\n".to_string() ).await.expect( "write" );
+		sink.close().await.expect( "close" );
+	};
+
+	let clt = async move
+	{
+		let (_sink, mut stream) = Framed::new( client, LinesCodec{} ).split();
+
+		while let Some( msg ) = stream.next().await.transpose().expect( "string" )
+		{
+			assert_eq!( &msg, "a\n" );
+		}
+	};
+
+	block_on( join( svr, clt ) );
+}
