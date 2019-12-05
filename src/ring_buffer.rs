@@ -2,6 +2,7 @@ use crate::import::*;
 
 
 /// A RingBuffer that implements `AsyncRead` and `AsyncWrite` from the futures library.
+/// TODO: what about dropping a split writer, will this wake the reader task?
 //
 pub struct RingBuffer<T: Sized + Copy>
 {

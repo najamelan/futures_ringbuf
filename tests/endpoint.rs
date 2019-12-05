@@ -12,7 +12,7 @@ use
 	futures_ringbuf :: { *                                                                      } ,
 	futures_codec   :: { Framed, LinesCodec                                                     } ,
 	futures         :: { AsyncRead, AsyncWrite, AsyncWriteExt, AsyncReadExt, executor::block_on } ,
-	futures         :: { future::join, SinkExt, StreamExt                                       } ,
+	futures         :: { future::join, SinkExt, StreamExt, channel::oneshot                     } ,
 	futures_test    :: { task::noop_waker                                                       } ,
 	assert_matches  :: { assert_matches                                                         } ,
 	std             :: { task::{ Poll, Context }                                                } ,
@@ -114,17 +114,22 @@ fn close_read_remaining() { block_on( async
 
 
 
+// TODO: the bug this guards against was in the asyncwrite impl for ringbuf, not in endpoint,
+// but currently there is no test on the asyncwrite impl for catching it. I should add that test.
+//
 #[ test ]
 //
 fn close_wake_pending()
 {
 	let (server, client) = Endpoint::pair( 10, 10 );
+	let (sender, receiver) = oneshot::channel::<()>();
 
 	let svr = async move
 	{
 		let (mut sink, _stream) = Framed::new( server, LinesCodec{} ).split();
 
-		sink.send( "a\n".to_string() ).await.expect( "write" );
+		receiver.await.expect( "read channel" );
+
 		sink.close().await.expect( "close" );
 	};
 
@@ -132,11 +137,15 @@ fn close_wake_pending()
 	{
 		let (_sink, mut stream) = Framed::new( client, LinesCodec{} ).split();
 
-		while let Some( msg ) = stream.next().await.transpose().expect( "string" )
-		{
-			assert_eq!( &msg, "a\n" );
-		}
+		sender.send(()).expect( "write channel" );
+
+		// This should not hang
+		//
+		assert!( stream.next().await.is_none() );
 	};
 
-	block_on( join( svr, clt ) );
+	// WARNING: even though we synchronize with the oneshot channel, this test does not hang
+	// when it should if the order of clt and svr are reversed here.
+	//
+	block_on( join( clt, svr ) );
 }

@@ -55,6 +55,14 @@ impl AsyncWrite for RingBuffer<u8>
 	fn poll_close( mut self: Pin<&mut Self>, _cx: &mut Context<'_> ) -> Poll< Result<(), io::Error> >
 	{
 		self.closed = true;
+
+		// If a reader is waiting for data, now that we wrote, wake them up.
+		//
+		if let Some(waker) = self.read_waker.take()
+		{
+			waker.wake();
+		}
+
 		Ok(()).into()
 	}
 }
