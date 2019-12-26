@@ -45,8 +45,8 @@ mod import
 	{
 		std         :: { io, fmt, pin::Pin, task::{ Context, Poll, Waker } } ,
 		ringbuf     :: { RingBuffer as SyncRingBuffer, Producer, Consumer  } ,
-		futures     :: { AsyncRead, AsyncWrite, executor::block_on         } ,
-		futures::io :: { ReadHalf, WriteHalf, AsyncReadExt, AsyncWriteExt  } ,
+		futures     :: { AsyncRead, AsyncWrite, task::noop_waker           } ,
+		futures::io :: { ReadHalf, WriteHalf, AsyncReadExt,                } ,
 	};
 
 
@@ -54,8 +54,9 @@ mod import
 	//
 	pub(crate) use
 	{
-		pretty_assertions :: { assert_eq                 } ,
-		futures_test      :: { task::{ new_count_waker } } ,
+		pretty_assertions :: { assert_eq                         } ,
+		futures           :: { AsyncWriteExt, executor::block_on } ,
+		futures_test      :: { task::{ new_count_waker }         } ,
 	};
 }
 

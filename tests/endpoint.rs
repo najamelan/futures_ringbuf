@@ -118,7 +118,7 @@ fn close_read_remaining() { block_on( async
 //
 fn close_wake_pending()
 {
-	let (server, client) = Endpoint::pair( 10, 10 );
+	let (server, client)   = Endpoint::pair( 10, 10 );
 	let (sender, receiver) = oneshot::channel::<()>();
 
 	let svr = async move
@@ -139,6 +139,40 @@ fn close_wake_pending()
 		// This should not hang
 		//
 		assert!( stream.next().await.is_none() );
+	};
+
+	// WARNING: even though we synchronize with the oneshot channel, this test does not hang
+	// when it should if the order of clt and svr are reversed here.
+	//
+	block_on( join( clt, svr ) );
+}
+
+
+
+#[ test ]
+//
+fn drop_wake_pending()
+{
+	let (server, mut client) = Endpoint::pair( 10, 10 );
+	let (sender, receiver)   = oneshot::channel::<()>();
+
+	let svr = async move
+	{
+		receiver.await.expect( "read channel" );
+
+		drop( server );
+	};
+
+	let clt = async move
+	{
+		sender.send(()).expect( "write channel" );
+
+		let mut read_buf = [0u8;1];
+
+		// This should not hang
+		//
+		let result = client.read( &mut read_buf ).await.expect( "Ok(0)" );
+		assert_eq!( result, 0 );
 	};
 
 	// WARNING: even though we synchronize with the oneshot channel, this test does not hang
