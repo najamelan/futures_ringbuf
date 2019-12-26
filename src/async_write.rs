@@ -12,30 +12,28 @@ impl AsyncWrite for RingBuffer<u8>
 	{
 		if self.closed { return Err( io::ErrorKind::NotConnected.into() ).into() }
 
+		let wrote = self.producer.push_slice( src );
 
-		match self.producer.push_slice( src )
+		if wrote != 0
 		{
-			Ok(n) =>
+			// If a reader is waiting for data, now that we wrote, wake them up.
+			//
+			if let Some(waker) = self.read_waker.take()
 			{
-				// If a reader is waiting for data, now that we wrote, wake them up.
-				//
-				if let Some(waker) = self.read_waker.take()
-				{
-					waker.wake();
-				}
-
-				Ok(n).into()
+				waker.wake();
 			}
 
+			Ok(wrote).into()
+		}
 
-			Err(_) =>
-			{
-				// If the buffer is full, store our waker so readers can wake us up when they have consumed some data.
-				//
-				self.write_waker.replace( cx.waker().clone() );
 
-				Poll::Pending
-			}
+		else
+		{
+			// If the buffer is full, store our waker so readers can wake us up when they have consumed some data.
+			//
+			self.write_waker.replace( cx.waker().clone() );
+
+			Poll::Pending
 		}
 	}
 

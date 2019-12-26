@@ -12,39 +12,36 @@ impl AsyncRead for RingBuffer<u8>
 	//
 	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, dst: &mut [u8] ) -> Poll< Result<usize, io::Error> >
 	{
-		match self.consumer.pop_slice( dst )
-		{
-			Ok(n) =>
-			{
-				// If a writer is waiting for place in the buffer, wake them.
-				//
-				if let Some(waker) = self.write_waker.take()
-				{
-					waker.wake();
-				}
+		let read = self.consumer.pop_slice( dst );
 
-				Poll::Ready( Ok(n) )
+		if  read != 0
+		{
+			// If a writer is waiting for place in the buffer, wake them.
+			//
+			if let Some(waker) = self.write_waker.take()
+			{
+				waker.wake();
 			}
 
-			// Will return Empty as an error if the buffer is empty.
-			//
-			Err(_) =>
+			Poll::Ready( Ok(read) )
+		}
+
+		else
+		{
+			if self.closed
 			{
-				if self.closed
-				{
-					// Signals end of stream.
-					//
-					Ok(0).into()
-				}
+				// Signals end of stream.
+				//
+				Ok(0).into()
+			}
 
-				else
-				{
-					// Store this waker so that the writer can wake us up after they wrote something.
-					//
-					self.read_waker.replace( cx.waker().clone() );
+			else
+			{
+				// Store this waker so that the writer can wake us up after they wrote something.
+				//
+				self.read_waker.replace( cx.waker().clone() );
 
-					Poll::Pending
-				}
+				Poll::Pending
 			}
 		}
 	}

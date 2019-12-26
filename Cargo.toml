@@ -8,7 +8,7 @@ repository = "najamelan/futures_ringbuf"
 
 [dependencies]
 futures = "^0.3.0"
-ringbuf = "^0.1"
+ringbuf = "^0.2"
 
 [dev-dependencies]
 assert_matches = "^1"
