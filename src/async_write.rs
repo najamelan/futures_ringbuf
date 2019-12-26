@@ -12,30 +12,28 @@ impl AsyncWrite for RingBuffer<u8>
 	{
 		if self.closed { return Err( io::ErrorKind::NotConnected.into() ).into() }
 
+		let wrote = self.producer.push_slice( src );
 
-		match self.producer.push_slice( src )
+		if wrote != 0
 		{
-			Ok(n) =>
+			// If a reader is waiting for data, now that we wrote, wake them up.
+			//
+			if let Some(waker) = self.read_waker.take()
 			{
-				// If a reader is waiting for data, now that we wrote, wake them up.
-				//
-				if let Some(waker) = self.read_waker.take()
-				{
-					waker.wake();
-				}
-
-				Ok(n).into()
+				waker.wake();
 			}
 
+			Ok(wrote).into()
+		}
 
-			Err(_) =>
-			{
-				// If the buffer is full, store our waker so readers can wake us up when they have consumed some data.
-				//
-				self.write_waker.replace( cx.waker().clone() );
 
-				Poll::Pending
-			}
+		else
+		{
+			// If the buffer is full, store our waker so readers can wake us up when they have consumed some data.
+			//
+			self.write_waker.replace( cx.waker().clone() );
+
+			Poll::Pending
 		}
 	}
 
@@ -55,6 +53,14 @@ impl AsyncWrite for RingBuffer<u8>
 	fn poll_close( mut self: Pin<&mut Self>, _cx: &mut Context<'_> ) -> Poll< Result<(), io::Error> >
 	{
 		self.closed = true;
+
+		// If a reader is waiting for data, now that we wrote, wake them up.
+		//
+		if let Some(waker) = self.read_waker.take()
+		{
+			waker.wake();
+		}
+
 		Ok(()).into()
 	}
 }
@@ -66,13 +72,14 @@ mod tests
 {
 	// What's tested:
 	//
-	// - ✔ writing to empty buffer
-	// - ✔ writing to half full
-	// - ✔ writing to full
-	// - ✔ setting the waker
-	// - ✔ the waker being woken up by a read
-	// - ✔ writing again after a read on the full buffer
-	// - ✔ writing to a closed buffer
+	// ✔ writing to empty buffer
+	// ✔ writing to half full
+	// ✔ writing to full
+	// ✔ setting the waker
+	// ✔ the waker being woken up by a read
+	// ✔ the waker from a reader is woken up when closing the writer
+	// ✔ writing again after a read on the full buffer
+	// ✔ writing to a closed buffer
 	//
 	use crate::{ import::{ *, assert_eq }, RingBuffer };
 
@@ -178,6 +185,29 @@ mod tests
 		assert_eq!( ring.len()      , 2 );
 		assert_eq!( ring.remaining(), 0 );
 
+	})}
+
+
+
+	#[test]
+	//
+	fn close_wake_reader() { block_on( async
+	{
+		let mut ring = RingBuffer::<u8>::new(2);
+
+		let (waker, _count) = new_count_waker();
+		let mut cx = Context::from_waker( &waker );
+
+		let mut read_buf = [0u8;1];
+
+		assert!( Pin::new( &mut ring ).poll_read( &mut cx, &mut read_buf ).is_pending() );
+
+		assert!( ring.read_waker .is_some() );
+		assert!( ring.write_waker.is_none() );
+
+		ring.close().await.expect( "close" );
+
+		assert!( ring.read_waker.is_none() );
 	})}
 
 

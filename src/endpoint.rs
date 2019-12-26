@@ -16,6 +16,9 @@ use crate::{ import::*, RingBuffer };
 /// When calling close on an endpoint, any further writes on that endpoint will return [`std::io::ErrorKind::NotConnected`]
 /// and any reads on the other endpoint will continue to empty the buffer and then return `Ok(0)`. `Ok(0)` means
 /// no new data will ever appear, unless you passed in a zero sized buffer.
+///
+/// If the remote endpoint is pending on a read, the task will be woken up when calling `close` or dropping
+/// this endpoint.
 //
 #[ derive( Debug ) ]
 //
@@ -76,5 +79,23 @@ impl AsyncWrite for Endpoint
 	fn poll_close( mut self: Pin<&mut Self>, cx: &mut Context<'_> ) -> Poll< io::Result<()> >
 	{
 		Pin::new( &mut self.writer ).poll_close( cx )
+	}
+}
+
+
+/// Makes sure that the reader of the other end is notified (woken up if pending) of the connection closure.
+//
+impl Drop for Endpoint
+{
+	fn drop( &mut self )
+	{
+		// closing the ringbuffer is not an async operation. It always returns immediately,
+		// so we can fake an async operation. Note that block_on is not an option, since
+		// that can't be nested and client code might use it as well.
+		//
+		let waker  = noop_waker();
+		let mut cx = Context::from_waker( &waker );
+
+		let _ = Pin::new( self ).poll_close( &mut cx);
 	}
 }

@@ -8,7 +8,7 @@ repository = "najamelan/futures_ringbuf"
 
 [dependencies]
 futures = "^0.3.0"
-ringbuf = "^0.1"
+ringbuf = "^0.2"
 
 [dev-dependencies]
 assert_matches = "^1"
@@ -31,7 +31,7 @@ license = "Unlicense"
 name = "futures_ringbuf"
 readme = "README.md"
 repository = "https://github.com/najamelan/futures_ringbuf"
-version = "0.1.6"
+version = "0.1.7"
 
 [package.metadata]
 [package.metadata.docs]

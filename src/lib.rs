@@ -43,9 +43,10 @@ mod import
 {
 	pub(crate) use
 	{
-		std     :: { io, fmt, pin::Pin, task::{ Context, Poll, Waker }                } ,
-		ringbuf :: { RingBuffer as SyncRingBuffer, Producer, Consumer                 } ,
-		futures :: { AsyncRead, AsyncWrite, io::{ ReadHalf, WriteHalf, AsyncReadExt } } ,
+		std         :: { io, fmt, pin::Pin, task::{ Context, Poll, Waker } } ,
+		ringbuf     :: { RingBuffer as SyncRingBuffer, Producer, Consumer  } ,
+		futures     :: { AsyncRead, AsyncWrite, task::noop_waker           } ,
+		futures::io :: { ReadHalf, WriteHalf, AsyncReadExt,                } ,
 	};
 
 

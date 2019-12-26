@@ -10,7 +10,7 @@ package:
   # - merge dev branch into master
   # - create git tag
   #
-  version       : 0.1.6
+  version       : 0.1.7
   name          : futures_ringbuf
   authors       : [ Naja Melan <najamelan@autistici.org> ]
   description   : Mock Type implementing AsyncRead/AsyncWrite for testing and examples.
@@ -43,7 +43,7 @@ badges:
 
 dependencies:
 
-  ringbuf: ^0.1
+  ringbuf: ^0.2
   futures: ^0.3.0
 
 dev-dependencies:
