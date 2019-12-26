@@ -114,9 +114,6 @@ fn close_read_remaining() { block_on( async
 
 
 
-// TODO: the bug this guards against was in the asyncwrite impl for ringbuf, not in endpoint,
-// but currently there is no test on the asyncwrite impl for catching it. I should add that test.
-//
 #[ test ]
 //
 fn close_wake_pending()

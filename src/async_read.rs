@@ -118,7 +118,7 @@ mod tests
 		let (waker, count) = new_count_waker();
 		let mut cx = Context::from_waker( &waker );
 
-		assert!( dbg!(Pin::new( &mut ring ).poll_read( &mut cx, &mut read_buf )).is_pending() );
+		assert!( Pin::new( &mut ring ).poll_read( &mut cx, &mut read_buf ).is_pending() );
 
 		assert!(  ring.is_empty() );
 		assert!( !ring.is_full()  );

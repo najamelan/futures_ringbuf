@@ -2,7 +2,14 @@ use crate::import::*;
 
 
 /// A RingBuffer that implements `AsyncRead` and `AsyncWrite` from the futures library.
-/// TODO: what about dropping a split writer, will this wake the reader task?
+///
+/// This object is rather special in that it's read and writes are connected to a single
+/// ringbuffer. It's good for low level unit tests for (eg. framing a connection with a
+/// codec) and verifying that a codec writes the correct data, but it does not mock a full
+/// network connection. Subtle things can go wrong, like when using `AsyncRead::split` and
+/// dropping the `WriteHalf`, the `ReadHalf` cannot detect that and the task won't be woken up.
+///
+/// If you want to mock a network connection, use [Endpoint](crate::Endpoint).
 //
 pub struct RingBuffer<T: Sized + Copy>
 {

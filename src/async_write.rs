@@ -72,13 +72,14 @@ mod tests
 {
 	// What's tested:
 	//
-	// - ✔ writing to empty buffer
-	// - ✔ writing to half full
-	// - ✔ writing to full
-	// - ✔ setting the waker
-	// - ✔ the waker being woken up by a read
-	// - ✔ writing again after a read on the full buffer
-	// - ✔ writing to a closed buffer
+	// ✔ writing to empty buffer
+	// ✔ writing to half full
+	// ✔ writing to full
+	// ✔ setting the waker
+	// ✔ the waker being woken up by a read
+	// ✔ the waker from a reader is woken up when closing the writer
+	// ✔ writing again after a read on the full buffer
+	// ✔ writing to a closed buffer
 	//
 	use crate::{ import::{ *, assert_eq }, RingBuffer };
 
@@ -184,6 +185,29 @@ mod tests
 		assert_eq!( ring.len()      , 2 );
 		assert_eq!( ring.remaining(), 0 );
 
+	})}
+
+
+
+	#[test]
+	//
+	fn close_wake_reader() { block_on( async
+	{
+		let mut ring = RingBuffer::<u8>::new(2);
+
+		let (waker, _count) = new_count_waker();
+		let mut cx = Context::from_waker( &waker );
+
+		let mut read_buf = [0u8;1];
+
+		assert!( Pin::new( &mut ring ).poll_read( &mut cx, &mut read_buf ).is_pending() );
+
+		assert!( ring.read_waker .is_some() );
+		assert!( ring.write_waker.is_none() );
+
+		ring.close().await.expect( "close" );
+
+		assert!( ring.read_waker.is_none() );
 	})}
 
 
