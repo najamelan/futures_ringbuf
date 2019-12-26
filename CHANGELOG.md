@@ -1,5 +1,10 @@
 # futures_ringbuf
 
+## 0.1.7 - 2019-11-12
+
+- Update to ringbuf 0.2.
+- Fix a bug where a waker wasn't woken up in endpoint when the connection get's closed.
+
 ## 0.1.6 - 2019-11-12
 
 - Update to futures 0.3.
