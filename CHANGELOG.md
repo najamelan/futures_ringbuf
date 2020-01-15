@@ -1,5 +1,9 @@
 # futures_ringbuf
 
+## 0.2.0 - 2019-01-15
+
+- Implement tokio AsyncRead/Write. This is behind a feature flag.
+
 ## 0.1.7 - 2019-11-12
 
 - Update to ringbuf 0.2.
