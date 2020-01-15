@@ -2,7 +2,7 @@ use crate::{ import::*, RingBuffer };
 
 
 
-impl FutAsyncW for RingBuffer<u8>
+impl TokioAsyncW for RingBuffer<u8>
 {
 	/// Will return Poll::Pending when the buffer is full. AsyncRead impl will wake up this task
 	/// when new place is made.
@@ -50,7 +50,7 @@ impl FutAsyncW for RingBuffer<u8>
 	/// Closes the stream. After this no more data can be send into it.
 	/// This method is infallible.
 	//
-	fn poll_close( mut self: Pin<&mut Self>, _cx: &mut Context<'_> ) -> Poll< Result<(), io::Error> >
+	fn poll_shutdown( mut self: Pin<&mut Self>, _cx: &mut Context<'_> ) -> Poll< Result<(), io::Error> >
 	{
 		self.closed = true;
 
@@ -102,7 +102,7 @@ mod tests
 		// write 1
 		//
 		let arr = [ b'a' ];
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		TokioAWExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		assert!( !ring.is_empty() );
 		assert!( !ring.is_full()  );
@@ -119,10 +119,10 @@ mod tests
 		// write 2
 		//
 		let arr = [ b'b' ];
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		TokioAWExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		let arr = [ b'c' ];
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		TokioAWExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		assert!( !ring.is_empty() );
 		assert!(  ring.is_full()  );
@@ -140,17 +140,17 @@ mod tests
 		// write 3
 		//
 		let arr = [ b'd' ];
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		TokioAWExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		let arr = [ b'e' ];
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		TokioAWExt::write( &mut ring, &arr ).await.expect( "write" );
 
 
 		let (waker, count) = new_count_waker();
 		let mut cx = Context::from_waker( &waker );
 
 		let arr = [ b'f' ];
-		assert!( FutAsyncW::poll_write( Pin::new( &mut ring ), &mut cx, &arr ).is_pending() );
+		assert!( TokioAsyncW::poll_write( Pin::new( &mut ring ), &mut cx, &arr ).is_pending() );
 
 		assert!( !ring.is_empty() );
 		assert!(  ring.is_full()  );
@@ -163,7 +163,7 @@ mod tests
 		// Pop 1 and try writing again
 		//
 		let mut read_buf = [0u8;1];
-		assert_eq!( 1, FutARExt::read( &mut ring, &mut read_buf ).await.unwrap() );
+		assert_eq!( 1, TokioARExt::read( &mut ring, &mut read_buf ).await.unwrap() );
 
 		assert_eq!( b'd', read_buf[0] );
 
@@ -177,7 +177,7 @@ mod tests
 		assert_eq!( ring.remaining(), 1 );
 
 
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		TokioAWExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		assert!( !ring.is_empty() );
 		assert!(  ring.is_full()  );
@@ -200,12 +200,12 @@ mod tests
 
 		let mut read_buf = [0u8;1];
 
-		assert!( FutAsyncR::poll_read( Pin::new( &mut ring ), &mut cx, &mut read_buf ).is_pending() );
+		assert!( TokioAsyncR::poll_read( Pin::new( &mut ring ), &mut cx, &mut read_buf ).is_pending() );
 
 		assert!( ring.read_waker .is_some() );
 		assert!( ring.write_waker.is_none() );
 
-		ring.close().await.expect( "close" );
+		ring.shutdown().await.expect( "close" );
 
 		assert!( ring.read_waker.is_none() );
 	})}
@@ -218,13 +218,13 @@ mod tests
 	{
 		let mut ring = RingBuffer::<u8>::new(2);
 
-		ring.close().await.unwrap();
+		ring.shutdown().await.unwrap();
 
 		let arr = [ b'a' ];
-		assert_eq!( FutAWExt::write( &mut ring, &arr ).await.unwrap_err().kind(), io::ErrorKind::NotConnected );
+		assert_eq!( TokioAWExt::write( &mut ring, &arr ).await.unwrap_err().kind(), io::ErrorKind::NotConnected );
 
 		// Should be the same
 		//
-		assert_eq!( FutAWExt::write( &mut ring, &arr ).await.unwrap_err().kind(), io::ErrorKind::NotConnected );
+		assert_eq!( TokioAWExt::write( &mut ring, &arr ).await.unwrap_err().kind(), io::ErrorKind::NotConnected );
 	})}
 }

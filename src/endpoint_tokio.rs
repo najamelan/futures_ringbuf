@@ -13,45 +13,46 @@ use crate::{ import::*, RingBuffer };
 /// By setting the buffer size precisely, one can simulate back pressure. Endpoint will return Pending on writes
 /// when full and on reads when empty.
 ///
-/// When calling close on an endpoint, any further writes on that endpoint will return [`std::io::ErrorKind::NotConnected`]
+/// When calling `shutdown` on an endpoint, any further writes on that endpoint will return [`std::io::ErrorKind::NotConnected`]
 /// and any reads on the other endpoint will continue to empty the buffer and then return `Ok(0)`. `Ok(0)` means
 /// no new data will ever appear, unless you passed in a zero sized buffer.
 ///
-/// If the remote endpoint is pending on a read, the task will be woken up when calling `close` or dropping
+/// If the remote endpoint is pending on a read, the task will be woken up when calling `shutdown` or dropping
 /// this endpoint.
 //
 #[ derive( Debug ) ]
 //
-pub struct Endpoint
+pub struct TokioEndpoint
 {
-	writer: WriteHalf< RingBuffer<u8> >,
-	reader: ReadHalf < RingBuffer<u8> >,
+	writer: TokioWriteHalf< RingBuffer<u8> >,
+	reader: TokioReadHalf < RingBuffer<u8> >,
 }
 
 
-impl Endpoint
+impl TokioEndpoint
 {
 	/// Create a pair of endpoints, specifying the buffer size for each one. The buffer size corresponds
 	/// to the buffer the respective endpoint writes to. The other will read from this one.
+	///
+	/// Tokio version.
 	//
-	pub fn pair( a_buf: usize, b_buf: usize ) -> (Endpoint, Endpoint)
+	pub fn pair( a_buf: usize, b_buf: usize ) -> (Self, Self)
 	{
 		let ab_buf = RingBuffer::<u8>::new( a_buf );
 		let ba_buf = RingBuffer::<u8>::new( b_buf );
 
-		let (ab_reader, ab_writer) = ab_buf.split();
-		let (ba_reader, ba_writer) = ba_buf.split();
+		let (ab_reader, ab_writer) = tokio::io::split( ab_buf );
+		let (ba_reader, ba_writer) = tokio::io::split( ba_buf );
 
 		(
-			Endpoint{ writer: ab_writer, reader: ba_reader },
-			Endpoint{ writer: ba_writer, reader: ab_reader },
+			Self{ writer: ab_writer, reader: ba_reader },
+			Self{ writer: ba_writer, reader: ab_reader },
 		)
 	}
 }
 
 
-
-impl FutAsyncR for Endpoint
+impl TokioAsyncR for TokioEndpoint
 {
 	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &mut [u8] ) -> Poll< io::Result<usize> >
 	{
@@ -60,8 +61,7 @@ impl FutAsyncR for Endpoint
 }
 
 
-
-impl FutAsyncW for Endpoint
+impl TokioAsyncW for TokioEndpoint
 {
 	fn poll_write( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &[u8] ) -> Poll< io::Result<usize> >
 	{
@@ -76,16 +76,16 @@ impl FutAsyncW for Endpoint
 	}
 
 
-	fn poll_close( mut self: Pin<&mut Self>, cx: &mut Context<'_> ) -> Poll< io::Result<()> >
+	fn poll_shutdown( mut self: Pin<&mut Self>, cx: &mut Context<'_> ) -> Poll< io::Result<()> >
 	{
-		Pin::new( &mut self.writer ).poll_close( cx )
+		Pin::new( &mut self.writer ).poll_shutdown( cx )
 	}
 }
 
 
 /// Makes sure that the reader of the other end is notified (woken up if pending) of the connection closure.
 //
-impl Drop for Endpoint
+impl Drop for TokioEndpoint
 {
 	fn drop( &mut self )
 	{
@@ -96,6 +96,6 @@ impl Drop for Endpoint
 		let waker  = noop_waker();
 		let mut cx = Context::from_waker( &waker );
 
-		let _ = Pin::new( self ).poll_close( &mut cx);
+		let _ = Pin::new( self ).poll_shutdown( &mut cx);
 	}
 }
