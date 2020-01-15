@@ -42,7 +42,7 @@ features = ["external_doc"]
 [target."cfg(target_arch = \"wasm32\")"]
 [target."cfg(target_arch = \"wasm32\")".dev-dependencies]
 wasm-bindgen = "^0.2"
-wasm-bindgen-test = "^0.2"
+wasm-bindgen-test = "^0.3"
 
 [target."cfg(target_arch = \"wasm32\")".dev-dependencies.wasm-bindgen-futures]
 version = "^0.4"
