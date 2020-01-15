@@ -42,12 +42,14 @@ matrix:
 
 
       script:
+        - cargo test --no-default-features
         - cargo test
+        - cargo test --features tokio
         - cargo test --release
         - cargo doc --no-deps --all-features
 
-        - wasm-pack test  --firefox --headless
-        - wasm-pack test  --chrome  --headless
+        - wasm-pack test  --firefox --headless -- --features tokio
+        - wasm-pack test  --chrome  --headless -- --features tokio
 
         - wasm-pack test  --firefox --headless --release
         - wasm-pack test  --chrome  --headless --release

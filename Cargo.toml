@@ -59,7 +59,7 @@ version = "0.2.0"
 [package.metadata]
 [package.metadata.docs]
 [package.metadata.docs.rs]
-features = ["external_doc"]
+all-features = true
 
 [target]
 [target."cfg(target_arch = \"wasm32\")"]
