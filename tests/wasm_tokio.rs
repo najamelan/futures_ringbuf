@@ -1,4 +1,4 @@
-#![ cfg(all( target_arch="wasm32", feature="futures_io" )) ]
+#![ cfg(all( target_arch="wasm32", feature="tokio" )) ]
 
 
 // Verify basic functionality on wasm
@@ -13,7 +13,7 @@ use
 	wasm_bindgen_futures :: { spawn_local                       } ,
 	futures_ringbuf      :: { *                                 } ,
 	futures              :: { SinkExt, StreamExt, future::ready } ,
-	futures_codec        :: { Framed, LinesCodec                } ,
+	tokio_util::codec    :: { Framed, LinesCodec                } ,
 };
 
 wasm_bindgen_test_configure!(run_in_browser);
@@ -22,16 +22,16 @@ wasm_bindgen_test_configure!(run_in_browser);
 
 #[wasm_bindgen_test]
 //
-fn basic_example()
+fn basic_example_tokio()
 {
 	let mock = RingBuffer::new( 13 );
-	let (mut writer, reader) = Framed::new( mock, LinesCodec{} ).split();
+	let (mut writer, reader) = Framed::new( mock, LinesCodec::new() ).split();
 
 
 	let send_task = async move
 	{
-		writer.send( "Hello World\n".to_string() ).await.expect( "send" );
-		writer.send( "Second line\n".to_string() ).await.expect( "send" );
+		writer.send( "Hello World.".to_string() ).await.expect( "send" );
+		writer.send( "Second line.".to_string() ).await.expect( "send" );
 		writer.close().await.expect( "close sender" );
 	};
 

@@ -7,8 +7,13 @@ status = "actively-developed"
 repository = "najamelan/futures_ringbuf"
 
 [dependencies]
-futures = "^0.3.0"
+futures = "^0.3"
 ringbuf = "^0.2"
+
+[dependencies.tokio]
+features = ["io-util"]
+optional = true
+version = "^0.2"
 
 [dev-dependencies]
 assert_matches = "^1"
@@ -17,8 +22,26 @@ futures-test = "^0.3.0"
 futures_codec = "^0.3"
 pretty_assertions = "^0.6"
 
+[dev-dependencies.tokio-util]
+features = ["codec"]
+version = "^0.2"
+
+[[example]]
+name = "basic"
+required-features = ["futures_io"]
+
+[[example]]
+name = "endpoint"
+required-features = ["futures_io"]
+
+[[example]]
+name = "tokio_endpoint"
+required-features = ["tokio"]
+
 [features]
+default = ["futures_io"]
 external_doc = []
+futures_io = []
 
 [package]
 authors = ["Naja Melan <najamelan@autistici.org>"]
@@ -31,18 +54,18 @@ license = "Unlicense"
 name = "futures_ringbuf"
 readme = "README.md"
 repository = "https://github.com/najamelan/futures_ringbuf"
-version = "0.1.7"
+version = "0.2.0"
 
 [package.metadata]
 [package.metadata.docs]
 [package.metadata.docs.rs]
-features = ["external_doc"]
+all-features = true
 
 [target]
 [target."cfg(target_arch = \"wasm32\")"]
 [target."cfg(target_arch = \"wasm32\")".dev-dependencies]
 wasm-bindgen = "^0.2"
-wasm-bindgen-test = "^0.2"
+wasm-bindgen-test = "^0.3"
 
 [target."cfg(target_arch = \"wasm32\")".dev-dependencies.wasm-bindgen-futures]
 version = "^0.4"

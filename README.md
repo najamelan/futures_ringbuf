@@ -13,7 +13,7 @@ It facilitates testing more complex situations like back pressure.
 
 It can also be used as an in memory buffer for communicating between async tasks. I haven't done benchmarks yet.
 
-There are currently 2 versions of the AsyncRead/Write traits. The _futures-rs_ version and the _tokio_ version. This crate implements the _futures-rs_ version only for now. We will see how the ecosystem evolves and adapt. This means you can frame the RingBuffer or the Endpoint connection with the [`futures-codec`](https://crates.io/crates/futures_codec) crate. You can send arbitrary rust structs using [`futures_cbor_codec`](https://crates.io/crates/futures_cbor_codec). Know that the interface of _futures-codec_ is identical to the _tokio-codec_ one, so converting a codec is trivial.
+There are currently 2 versions of the AsyncRead/Write traits. The _futures-rs_ version and the _tokio_ version. This crate implements both behind feature flags: `futures_io` and `tokio`. `futures_io` is enabled by default.
 
 Data in transit is held in an internal RingBuffer from the [ringbuf crate](https://crates.io/crates/ringbuf).
 
@@ -159,6 +159,8 @@ fn main()
 When using one ringbuffer, we get both ends of one connection. If we want a more realistic duplex connection, we
 need two ringbuffers, with one endpoint reading from the ringbuffer the other endpoint is writing to. Tasks need
 to be woken up correctly when new data or space becomes available... To facilitate this, an `Endpoint` type is provided which will take care of this setup for you.
+
+Note: it wasn't convenient to implement a tokio version in the same type, so a new type is introduced, [TokioEndpoint].
 
 
 ### Endpoint example

@@ -11,6 +11,8 @@ use crate::import::*;
 ///
 /// If you want to mock a network connection, use [Endpoint](crate::Endpoint).
 //
+#[ allow( dead_code )]
+//
 pub struct RingBuffer<T: Sized + Copy>
 {
 	pub(crate) producer   : Producer<T>   ,

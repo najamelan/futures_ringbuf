@@ -1,7 +1,7 @@
 use crate::{ import::*, RingBuffer };
 
 
-impl FutAsyncR for RingBuffer<u8>
+impl TokioAsyncR for RingBuffer<u8>
 {
 	/// Will return Poll::Pending when the buffer is empty. Will be woken up by the AsyncWrite impl when new
 	/// data is written.
@@ -83,7 +83,7 @@ mod tests
 		//
 		let mut read_buf = [0u8;1];
 
-		FutARExt::read( &mut ring, &mut read_buf ).await.unwrap();
+		TokioARExt::read( &mut ring, &mut read_buf ).await.unwrap();
 
 		assert!( !ring.is_empty() );
 		assert!( !ring.is_full()  );
@@ -99,7 +99,7 @@ mod tests
 
 		// read 2
 		//
-		FutARExt::read( &mut ring, &mut read_buf ).await.unwrap();
+		TokioARExt::read( &mut ring, &mut read_buf ).await.unwrap();
 
 		assert!(  ring.is_empty() );
 		assert!( !ring.is_full()  );
@@ -118,7 +118,7 @@ mod tests
 		let (waker, count) = new_count_waker();
 		let mut cx = Context::from_waker( &waker );
 
-		assert!( FutAsyncR::poll_read( Pin::new( &mut ring ), &mut cx, &mut read_buf ).is_pending() );
+		assert!( TokioAsyncR::poll_read(Pin::new( &mut ring ), &mut cx, &mut read_buf ).is_pending() );
 
 		assert!(  ring.is_empty() );
 		assert!( !ring.is_full()  );
@@ -133,7 +133,7 @@ mod tests
 		//
 		let arr = [ b'c' ];
 
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		TokioAWExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		assert!( !ring.is_empty() );
 		assert!( !ring.is_full()  );
@@ -144,7 +144,7 @@ mod tests
 		assert!( ring.read_waker.is_none() );
 		assert_eq!( count, 1 );
 
-		assert_eq!( 1, FutARExt::read( &mut ring, &mut read_buf ).await.unwrap() );
+		assert_eq!( 1, TokioARExt::read( &mut ring, &mut read_buf ).await.unwrap() );
 
 		assert_eq!( b'c', read_buf[0] );
 
@@ -164,17 +164,17 @@ mod tests
 		let mut read_buf = [0u8;1]                  ;
 		let     arr      = [ b'a' ]                 ;
 
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
-		ring.close().await.unwrap();
+		TokioAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		ring.shutdown().await.unwrap();
 
-		FutARExt::read( &mut ring, &mut read_buf ).await.unwrap();
+		TokioARExt::read( &mut ring, &mut read_buf ).await.unwrap();
 
 		assert_eq!( b'a', read_buf[0] );
-		assert_eq!( FutARExt::read( &mut ring, &mut read_buf ).await.unwrap(), 0 );
+		assert_eq!( TokioARExt::read( &mut ring, &mut read_buf ).await.unwrap(), 0 );
 
 		// try read again, just in case
 		//
-		assert_eq!( FutARExt::read( &mut ring, &mut read_buf ).await.unwrap(), 0 );
+		assert_eq!( TokioARExt::read( &mut ring, &mut read_buf ).await.unwrap(), 0 );
 
 	})}
 }

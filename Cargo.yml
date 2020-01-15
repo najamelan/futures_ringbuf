@@ -10,7 +10,7 @@ package:
   # - merge dev branch into master
   # - create git tag
   #
-  version       : 0.1.7
+  version       : 0.2.0
   name          : futures_ringbuf
   authors       : [ Naja Melan <najamelan@autistici.org> ]
   description   : Mock Type implementing AsyncRead/AsyncWrite for testing and examples.
@@ -25,14 +25,24 @@ package:
   metadata:
     docs:
       rs:
-        features: [ external_doc ]
+        all-features: true
 
 
 features:
 
+  default: [ futures_io ]
+
   # For internal use only. Enables integrating the README.md in rustdoc documentation.
   #
   external_doc: []
+
+  # Implement tokio AsyncRead/AsyncWrite
+  #
+  # tokio: []
+
+  # Implement futures AsyncRead/AsyncWrite
+  #
+  futures_io: []
 
 
 badges:
@@ -43,8 +53,11 @@ badges:
 
 dependencies:
 
+  # Public dependencies, bump major if changing any version number here.
+  #
   ringbuf: ^0.2
-  futures: ^0.3.0
+  futures: ^0.3
+  tokio  : { version: ^0.2, features: [ io-util ], optional: true }
 
 dev-dependencies:
 
@@ -53,6 +66,7 @@ dev-dependencies:
   futures_codec       : ^0.3
   assert_matches      : ^1
   ergo-pin            : ^0.1
+  tokio-util          : { version: ^0.2, features: [ codec ] }
 
 
 target:
@@ -62,6 +76,17 @@ target:
     dev-dependencies:
 
       wasm-bindgen         : ^0.2
-      wasm-bindgen-test    : ^0.2
+      wasm-bindgen-test    : ^0.3
       wasm-bindgen-futures : { version: ^0.4 }
 
+
+example:
+
+  - name             : basic
+    required-features: [ futures_io ]
+
+  - name             : endpoint
+    required-features: [ futures_io ]
+
+  - name             : tokio_endpoint
+    required-features: [ tokio ]
