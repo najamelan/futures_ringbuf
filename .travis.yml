@@ -1,7 +1,4 @@
 language: rust
-rust    :
-  - stable
-  - nightly
 
 # Need to cache the whole `.cargo` directory to keep .crates.toml for
 # cargo-update to work
@@ -24,16 +21,27 @@ branches:
     - master
     - dev
 
-matrix:
+jobs:
 
   include:
 
-    # This won't work because we use a nightly feature in dev-dependencies and the feature leaks:
-    #
-    # - rust  : stable
-    #   script: cargo check
+    - name  : linux stable check
+      os    : linux
+      rust  : stable
+      script: cargo check
 
-    - os: linux
+    - name  : linux nightly test everything
+      os    : linux
+      dist  : bionic
+      rust  : nightly
+
+      addons:
+        firefox: latest
+        apt:
+          packages:
+            - libssl-dev # for cargo-tarpaulin
+            - libgtk-3-dev # needed for headless (sic) firefox https://bugzilla.mozilla.org/show_bug.cgi?id=1372998
+            - libdbus-glib-1-dev # firefox
 
       # for wasm tests
       #
@@ -48,22 +56,26 @@ matrix:
         - cargo test --release
         - cargo doc --no-deps --all-features
 
-        - wasm-pack test  --firefox --headless -- --features tokio
-        - wasm-pack test  --chrome  --headless -- --features tokio
-
         - wasm-pack test  --firefox --headless --release
-        - wasm-pack test  --chrome  --headless --release
+        # - wasm-pack test  --chrome  --headless --release # fails on travis, try again later.
+
+        - wasm-pack test  --firefox --headless -- --features tokio
+        # - wasm-pack test  --chrome  --headless -- --features tokio # fails on travis, try again later.
+
+        # code coverage
+        #
+        - bash <(curl https://raw.githubusercontent.com/xd009642/tarpaulin/master/travis-install.sh)
+        - cargo tarpaulin --features "tokio" --out Xml
+        - bash <(curl -s https://codecov.io/bash)
 
 
     - os    : osx
       script:
         - cargo test
-        - cargo test --release
 
 
     - os    : windows
       script:
         - cargo test
-        - cargo test --release
 
 
