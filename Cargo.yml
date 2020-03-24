@@ -2,13 +2,18 @@ package:
 
   # When releasing to crates.io:
   #
+  # - last check for all TODO, FIXME, expect, unwrap.
+  # - re-read and final polish of documentation
+  # - run cargo udeps
+  # - run cargo clippy
+  # - recheck log statements (informative, none left that were just for development, ...)
   # - Update CHANGELOG.md.
   # - Update version numbers in Cargo.yml, Cargo.toml, install section of readme.
   # - verify CI result
-  # - test dependent crates
+  # - run cargo test on dependent crates
   # - cargo publish
   # - merge dev branch into master
-  # - create git tag
+  # - create git tag with version number
   #
   version       : 0.2.0
   name          : futures_ringbuf
@@ -57,11 +62,12 @@ dependencies:
   futures: ^0.3
   tokio  : { version: ^0.2, features: [ io-util ], optional: true }
 
+
 dev-dependencies:
 
   pretty_assertions   : ^0.6
   futures-test        : ^0.3.0
-  futures_codec       : ^0.3
+  futures_codec       : ^0.4
   assert_matches      : ^1
   ergo-pin            : ^0.1
   tokio-util          : { version: ^0.2, features: [ codec ] }

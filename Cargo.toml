@@ -22,7 +22,7 @@ version = "^0.2"
 assert_matches = "^1"
 ergo-pin = "^0.1"
 futures-test = "^0.3.0"
-futures_codec = "^0.3"
+futures_codec = "^0.4"
 pretty_assertions = "^0.6"
 
 [dev-dependencies.tokio-util]
