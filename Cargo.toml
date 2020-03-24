@@ -6,6 +6,9 @@ status = "actively-developed"
 [badges.travis-ci]
 repository = "najamelan/futures_ringbuf"
 
+[build-dependencies]
+rustc_version = "^0.2"
+
 [dependencies]
 futures = "^0.3"
 ringbuf = "^0.2"
@@ -40,7 +43,6 @@ required-features = ["tokio"]
 
 [features]
 default = ["futures_io"]
-external_doc = []
 futures_io = []
 
 [package]
@@ -62,6 +64,10 @@ version = "0.2.0"
 [package.metadata.docs.rs]
 all-features = true
 targets = []
+
+[profile]
+[profile.release]
+codegen-units = 1
 
 [target]
 [target."cfg(target_arch = \"wasm32\")"]

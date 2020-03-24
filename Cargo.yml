@@ -34,13 +34,9 @@ features:
 
   default: [ futures_io ]
 
-  # For internal use only. Enables integrating the README.md in rustdoc documentation.
-  #
-  external_doc: []
-
   # Implement tokio AsyncRead/AsyncWrite
   #
-  # tokio: []
+  # optional crate: tokio
 
   # Implement futures AsyncRead/AsyncWrite
   #
@@ -69,6 +65,18 @@ dev-dependencies:
   assert_matches      : ^1
   ergo-pin            : ^0.1
   tokio-util          : { version: ^0.2, features: [ codec ] }
+
+
+build-dependencies:
+
+  rustc_version: ^0.2
+
+
+profile:
+
+  release:
+
+    codegen-units: 1
 
 
 target:

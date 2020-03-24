@@ -20,6 +20,8 @@ use crate::{ import::*, RingBuffer };
 /// If the remote endpoint is pending on a read, the task will be woken up when calling `shutdown` or dropping
 /// this endpoint.
 //
+#[ cfg_attr( nightly, doc(cfg( feature = "tokio" )) ) ]
+//
 #[ derive( Debug ) ]
 //
 pub struct TokioEndpoint
