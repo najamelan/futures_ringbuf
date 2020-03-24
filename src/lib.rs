@@ -1,5 +1,3 @@
-// See: https://github.com/rust-lang/rust/issues/44732#issuecomment-488766871
-//
 #![ cfg_attr( nightly, feature( external_doc, doc_cfg    ) ) ]
 #![ cfg_attr( nightly, doc    ( include = "../README.md" ) ) ]
 #![ doc = "" ] // empty doc line to handle missing doc warning when the feature is missing.
