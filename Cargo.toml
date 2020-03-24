@@ -49,6 +49,7 @@ categories = ["asynchronous", "network-programming", "development-tools::testing
 description = "Mock Type implementing AsyncRead/AsyncWrite for testing and examples."
 documentation = "https://docs.rs/futures_ringbuf"
 edition = "2018"
+exclude = ["tests", "examples", "ci", ".travis.yml", "TODO.md", "CONTRIBUTING.md"]
 keywords = ["futures", "mocking", "stream", "testing", "async"]
 license = "Unlicense"
 name = "futures_ringbuf"
@@ -60,6 +61,7 @@ version = "0.2.0"
 [package.metadata.docs]
 [package.metadata.docs.rs]
 all-features = true
+targets = []
 
 [target]
 [target."cfg(target_arch = \"wasm32\")"]

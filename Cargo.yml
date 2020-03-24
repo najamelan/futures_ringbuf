@@ -21,11 +21,13 @@ package:
   categories    : [ asynchronous, network-programming, "development-tools::testing" ]
   license       : Unlicense
   edition       : "2018"
+  exclude       : [ tests, examples, ci, .travis.yml, TODO.md, CONTRIBUTING.md ]
 
   metadata:
     docs:
       rs:
         all-features: true
+        targets     : []
 
 
 features:
