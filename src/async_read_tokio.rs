@@ -1,6 +1,9 @@
 use crate::{ import::*, RingBuffer };
 
-
+/// Currently does nothing on trait impls, but hopefully some day it will.
+//
+#[ cfg_attr( nightly, doc(cfg( feature = "tokio" )) ) ]
+//
 impl TokioAsyncR for RingBuffer<u8>
 {
 	/// Will return Poll::Pending when the buffer is empty. Will be woken up by the AsyncWrite impl when new
@@ -56,14 +59,14 @@ mod tests
 {
 	// What's tested:
 	//
-	// - ✔ reading from full
-	// - ✔ reading from half full
-	// - ✔ reading from empty buffer
-	// - ✔ setting the waker
-	// - ✔ the waker being woken up by a write
-	// - ✔ reading again after a write on the empty buffer
-	// - ✔ reading from a closed buffer
-	// - ✔ reading from a closed empty buffer
+	// ✔ reading from full
+	// ✔ reading from half full
+	// ✔ reading from empty buffer
+	// ✔ setting the waker
+	// ✔ the waker being woken up by a write
+	// ✔ reading again after a write on the empty buffer
+	// ✔ reading from a closed buffer
+	// ✔ reading from a closed empty buffer
 	//
 	use crate::{ import::{ *, assert_eq }, RingBuffer };
 

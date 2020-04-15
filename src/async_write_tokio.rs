@@ -1,7 +1,10 @@
 use crate::{ import::*, RingBuffer };
 
 
-
+/// Currently does nothing on trait impls, but hopefully some day it will.
+//
+#[ cfg_attr( nightly, doc(cfg( feature = "tokio" )) ) ]
+//
 impl TokioAsyncW for RingBuffer<u8>
 {
 	/// Will return Poll::Pending when the buffer is full. AsyncRead impl will wake up this task

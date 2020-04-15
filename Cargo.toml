@@ -6,6 +6,9 @@ status = "actively-developed"
 [badges.travis-ci]
 repository = "najamelan/futures_ringbuf"
 
+[build-dependencies]
+rustc_version = "^0.2"
+
 [dependencies]
 futures = "^0.3"
 ringbuf = "^0.2"
@@ -19,7 +22,7 @@ version = "^0.2"
 assert_matches = "^1"
 ergo-pin = "^0.1"
 futures-test = "^0.3.0"
-futures_codec = "^0.3"
+futures_codec = "^0.4"
 pretty_assertions = "^0.6"
 
 [dev-dependencies.tokio-util]
@@ -40,7 +43,6 @@ required-features = ["tokio"]
 
 [features]
 default = ["futures_io"]
-external_doc = []
 futures_io = []
 
 [package]
@@ -49,17 +51,23 @@ categories = ["asynchronous", "network-programming", "development-tools::testing
 description = "Mock Type implementing AsyncRead/AsyncWrite for testing and examples."
 documentation = "https://docs.rs/futures_ringbuf"
 edition = "2018"
+exclude = ["ci", ".travis.yml", "TODO.md"]
 keywords = ["futures", "mocking", "stream", "testing", "async"]
 license = "Unlicense"
 name = "futures_ringbuf"
 readme = "README.md"
 repository = "https://github.com/najamelan/futures_ringbuf"
-version = "0.2.0"
+version = "0.2.1"
 
 [package.metadata]
 [package.metadata.docs]
 [package.metadata.docs.rs]
 all-features = true
+targets = []
+
+[profile]
+[profile.release]
+codegen-units = 1
 
 [target]
 [target."cfg(target_arch = \"wasm32\")"]

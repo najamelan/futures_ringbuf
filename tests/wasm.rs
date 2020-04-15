@@ -5,7 +5,7 @@
 //
 // Tested:
 //
-// - ✔ the code from the basic example
+// ✔ the code from the basic example
 //
 use
 {

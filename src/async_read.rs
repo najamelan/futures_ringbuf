@@ -56,14 +56,14 @@ mod tests
 {
 	// What's tested:
 	//
-	// - ✔ reading from full
-	// - ✔ reading from half full
-	// - ✔ reading from empty buffer
-	// - ✔ setting the waker
-	// - ✔ the waker being woken up by a write
-	// - ✔ reading again after a write on the empty buffer
-	// - ✔ reading from a closed buffer
-	// - ✔ reading from a closed empty buffer
+	// ✔ reading from full
+	// ✔ reading from half full
+	// ✔ reading from empty buffer
+	// ✔ setting the waker
+	// ✔ the waker being woken up by a write
+	// ✔ reading again after a write on the empty buffer
+	// ✔ reading from a closed buffer
+	// ✔ reading from a closed empty buffer
 	//
 	use crate::{ import::{ *, assert_eq }, RingBuffer };
 

@@ -1,5 +1,11 @@
 # futures_ringbuf
 
+## 0.2.1 - 2020-04-15
+
+- Update to futures_codec 0.4.
+- fix docs to not break on stable.
+- fix CI configuration.
+
 ## 0.2.0 - 2019-01-15
 
 - Implement tokio AsyncRead/Write. This is behind a feature flag.
