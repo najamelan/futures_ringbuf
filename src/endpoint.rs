@@ -89,9 +89,8 @@ impl Drop for Endpoint
 {
 	fn drop( &mut self )
 	{
-		// closing the ringbuffer is not an async operation. It always returns immediately,
-		// so we can fake an async operation. Note that block_on is not an option, since
-		// that can't be nested and client code might use it as well.
+		// Closing the ringbuffer is not an async operation. It always returns immediately,
+		// so we just ignore the return value of poll_close.
 		//
 		let waker  = noop_waker();
 		let mut cx = Context::from_waker( &waker );

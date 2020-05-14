@@ -1,1 +1,5 @@
+- create and test SketchyRead and SketchyWrite.
+- in API docs there is two AsyncRead/Write mentions, but it isn't clear that one is for tokio. Mention which version it is in the comments.
+- try to merge tokio endpoint with normal endpoint
+- modernize examples (in readme)
 - check code coverage for tests

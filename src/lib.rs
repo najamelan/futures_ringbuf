@@ -41,6 +41,10 @@ pub use self::ring_buffer ::* ;
 #[ cfg( feature = "futures_io" ) ] pub use async_write::*;
 #[ cfg( feature = "futures_io" ) ] pub use endpoint   ::*;
 
+#[ cfg( feature = "sketchy" ) ] mod benevolent_dictator;
+#[ cfg( feature = "sketchy" ) ] mod sketchy_read;
+#[ cfg( feature = "sketchy" ) ] pub use benevolent_dictator::*;
+#[ cfg( feature = "sketchy" ) ] pub use sketchy_read::*;
 
 
 // External dependencies
