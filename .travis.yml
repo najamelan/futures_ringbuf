@@ -61,6 +61,7 @@ jobs:
         - bash ci/test.bash
         - bash ci/doc.bash
         - bash ci/wasm.bash
+        - bash ci/deny.bash
         - bash ci/coverage.bash
 
 
