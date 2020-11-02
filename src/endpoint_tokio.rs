@@ -56,7 +56,7 @@ impl TokioEndpoint
 
 impl TokioAsyncR for TokioEndpoint
 {
-	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &mut [u8] ) -> Poll< io::Result<usize> >
+	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &mut ReadBuf<'_> ) -> Poll< io::Result<()> >
 	{
 		Pin::new( &mut self.reader ).poll_read( cx, buf )
 	}

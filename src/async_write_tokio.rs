@@ -201,7 +201,8 @@ mod tests
 		let (waker, _count) = new_count_waker();
 		let mut cx = Context::from_waker( &waker );
 
-		let mut read_buf = [0u8;1];
+		let mut buffer = [0u8;1];
+		let mut read_buf = ReadBuf::new( &mut buffer );
 
 		assert!( TokioAsyncR::poll_read( Pin::new( &mut ring ), &mut cx, &mut read_buf ).is_pending() );
 

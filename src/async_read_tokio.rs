@@ -13,9 +13,9 @@ impl TokioAsyncR for RingBuffer<u8>
 	///
 	/// This method is infallible.
 	//
-	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, dst: &mut [u8] ) -> Poll< Result<usize, io::Error> >
+	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, dst: &mut ReadBuf<'_> ) -> Poll< Result<(), io::Error> >
 	{
-		let read = self.consumer.pop_slice( dst );
+		let read = self.consumer.pop_slice( dst.initialized_mut() );
 
 		if  read != 0
 		{
@@ -26,7 +26,9 @@ impl TokioAsyncR for RingBuffer<u8>
 				waker.wake();
 			}
 
-			Poll::Ready( Ok(read) )
+			dst.advance( read );
+
+			Poll::Ready( Ok(()) )
 		}
 
 		else
@@ -35,7 +37,7 @@ impl TokioAsyncR for RingBuffer<u8>
 			{
 				// Signals end of stream.
 				//
-				Ok(0).into()
+				Ok(()).into()
 			}
 
 			else
@@ -84,9 +86,9 @@ mod tests
 
 		// read 1
 		//
-		let mut read_buf = [0u8;1];
+		let mut normal_buf = [0u8;1];
 
-		TokioARExt::read( &mut ring, &mut read_buf ).await.unwrap();
+		TokioARExt::read( &mut ring, &mut normal_buf ).await.unwrap();
 
 		assert!( !ring.is_empty() );
 		assert!( !ring.is_full()  );
@@ -97,12 +99,12 @@ mod tests
 		assert!( ring.read_waker .is_none() );
 		assert!( ring.write_waker.is_none() );
 
-		assert_eq!( b'a', read_buf[0] );
+		assert_eq!( b'a', normal_buf[0] );
 
 
 		// read 2
 		//
-		TokioARExt::read( &mut ring, &mut read_buf ).await.unwrap();
+		TokioARExt::read( &mut ring, &mut normal_buf ).await.unwrap();
 
 		assert!(  ring.is_empty() );
 		assert!( !ring.is_full()  );
@@ -113,13 +115,17 @@ mod tests
 		assert!( ring.read_waker .is_none() );
 		assert!( ring.write_waker.is_none() );
 
-		assert_eq!( b'b', read_buf[0] );
+		assert_eq!( b'b', normal_buf[0] );
 
 
 		// read 3
 		//
 		let (waker, count) = new_count_waker();
 		let mut cx = Context::from_waker( &waker );
+
+
+		let mut buffer     = [0u8;1];
+		let mut read_buf   = ReadBuf::new( &mut buffer );
 
 		assert!( TokioAsyncR::poll_read(Pin::new( &mut ring ), &mut cx, &mut read_buf ).is_pending() );
 
@@ -147,9 +153,9 @@ mod tests
 		assert!( ring.read_waker.is_none() );
 		assert_eq!( count, 1 );
 
-		assert_eq!( 1, TokioARExt::read( &mut ring, &mut read_buf ).await.unwrap() );
+		assert_eq!( 1, TokioARExt::read( &mut ring, &mut normal_buf ).await.unwrap() );
 
-		assert_eq!( b'c', read_buf[0] );
+		assert_eq!( b'c', normal_buf[0] );
 
 		assert!(  ring.is_empty() );
 		assert!( !ring.is_full()  );

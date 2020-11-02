@@ -7,11 +7,12 @@ status = "actively-developed"
 repository = "najamelan/futures_ringbuf"
 
 [build-dependencies]
-rustc_version = "^0.2"
+rustc_version = "^0.3"
 
 [dependencies]
 futures = "^0.3"
 log = "^0.4"
+log-derive = "^0.4"
 ringbuf = "^0.2"
 
 [dependencies.rand]
@@ -25,7 +26,7 @@ version = "^0.2"
 [dependencies.tokio]
 features = ["io-util"]
 optional = true
-version = "^0.2"
+version = "^0.3"
 
 [dev-dependencies]
 assert_matches = "^1"
@@ -36,7 +37,7 @@ pretty_assertions = "^0.6"
 
 [dev-dependencies.tokio-util]
 features = ["codec"]
-version = "^0.2"
+version = "^0.5"
 
 [[example]]
 name = "basic"

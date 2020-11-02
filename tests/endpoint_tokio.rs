@@ -13,7 +13,7 @@ use
 {
 	futures_ringbuf   :: { *                                                                      } ,
 	tokio_util::codec :: { Framed, LinesCodec                                                     } ,
-	tokio::io         :: { AsyncRead, AsyncWrite, AsyncWriteExt, AsyncReadExt                     } ,
+	tokio::io         :: { AsyncRead, AsyncWrite, AsyncWriteExt, AsyncReadExt, ReadBuf            } ,
 	futures           :: { future::join, SinkExt, StreamExt, channel::oneshot, executor::block_on } ,
 	futures_test      :: { task::noop_waker                                                       } ,
 	assert_matches    :: { assert_matches                                                         } ,
@@ -84,10 +84,13 @@ fn close_read()
 
 	block_on( pserv.as_mut().shutdown() ).expect( "close server" );
 
-	let mut buf = [0u8;10];
-	let res = pcl.poll_read( &mut cx, &mut buf );
+	let mut buf      = [0u8;10];
+	let mut read_buf = ReadBuf::new( &mut buf );
 
-	assert_matches!( res, Poll::Ready( Ok(0) ));
+	let res = pcl.poll_read( &mut cx, &mut read_buf );
+
+	assert_eq!( read_buf.filled().len(), 0 );
+	assert_matches!( res, Poll::Ready( Ok(()) ));
 }
 
 
@@ -125,7 +128,7 @@ fn close_wake_pending()
 
 	let svr = async move
 	{
-		let (mut sink, _stream) = Framed::new( server, LinesCodec::new() ).split();
+		let (mut sink, _stream) = Framed::new( server, LinesCodec::new() ).split::<String>();
 
 		receiver.await.expect( "read channel" );
 
@@ -134,7 +137,7 @@ fn close_wake_pending()
 
 	let clt = async move
 	{
-		let (_sink, mut stream) = Framed::new( client, LinesCodec::new() ).split();
+		let (_sink, mut stream) = Framed::new( client, LinesCodec::new() ).split::<String>();
 
 		sender.send(()).expect( "write channel" );
 
