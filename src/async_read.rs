@@ -4,14 +4,21 @@ use crate::{ import::*, RingBuffer };
 impl FutAsyncR for RingBuffer<u8>
 {
 	/// Will return Poll::Pending when the buffer is empty. Will be woken up by the AsyncWrite impl when new
-	/// data is written.
+	/// data is written or the writer is closed.
 	///
-	/// When the buffer (for network simulation) is closed and empty, this will return `Poll::Ready( Ok(0) )`.
+	/// When the buffer (for network simulation) is closed and empty, or if you pass in a 0 byte buffer,
+	/// this will return `Poll::Ready( Ok(0) )`.
 	///
 	/// This method is infallible.
 	//
 	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, dst: &mut [u8] ) -> Poll< Result<usize, io::Error> >
 	{
+		if dst.len() == 0
+		{
+			return Poll::Ready( Ok(0) );
+		}
+
+
 		let read = self.consumer.pop_slice( dst );
 
 		if  read != 0
