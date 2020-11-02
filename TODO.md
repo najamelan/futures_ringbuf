@@ -1,6 +1,5 @@
 - don't have magic numbers for probablilities, let the dictator choose them based on the seed.
-- add SketchyWrite
-- create and test SketchyRead and SketchyWrite.
+- create Sketchy that implements all futures traits if the inner type implements them.
 - verify we really use a uniform distribution.
 - consider creating a separate crate with SketchyStream, SketchySink, SketchyFuture.
 - check code coverage for tests

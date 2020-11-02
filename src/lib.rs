@@ -34,9 +34,9 @@ pub use async_write::*;
 pub use endpoint   ::*;
 
 #[ cfg( feature = "sketchy" ) ] mod dictator;
-#[ cfg( feature = "sketchy" ) ] mod sketchy_read;
+#[ cfg( feature = "sketchy" ) ] mod sketchy;
 #[ cfg( feature = "sketchy" ) ] pub use dictator::*;
-#[ cfg( feature = "sketchy" ) ] pub use sketchy_read::*;
+#[ cfg( feature = "sketchy" ) ] pub use sketchy::*;
 
 
 // External dependencies

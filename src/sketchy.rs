@@ -9,14 +9,14 @@ use crate::{ import::*, Dictator };
 //
 #[ derive( Debug ) ]
 //
-pub struct SketchyRead<T>
+pub struct Sketchy<T>
 {
 	inner: T        ,
 	bd   : Dictator ,
 }
 
 
-impl<T> SketchyRead<T>
+impl<T> Sketchy<T>
 {
 	/// Create a new wrapper with random behavior based on seed.
 	//
@@ -31,7 +31,7 @@ impl<T> SketchyRead<T>
 }
 
 
-impl<T> AsyncRead for SketchyRead<T>
+impl<T> AsyncRead for Sketchy<T>
 
 	where T: AsyncRead + Unpin
 {
@@ -61,7 +61,7 @@ impl<T> AsyncRead for SketchyRead<T>
 
 
 
-impl<T> AsyncWrite for SketchyRead<T> where T: AsyncWrite + Unpin
+impl<T> AsyncWrite for Sketchy<T> where T: AsyncWrite + Unpin
 {
 	fn poll_write( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &[u8] ) -> Poll< io::Result<usize> >
 	{
