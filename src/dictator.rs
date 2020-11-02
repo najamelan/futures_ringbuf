@@ -1,6 +1,6 @@
 use
 {
-	rand        :: { Rng, SeedableRng, distributions::uniform::SampleUniform } ,
+	rand        :: { Rng, RngCore, thread_rng, SeedableRng, distributions::uniform::SampleUniform } ,
 	rand_chacha :: { ChaCha8Rng                                              } ,
 	std         :: { ops::Range, fmt                                         } ,
 	log         :: { *                                                       } ,
@@ -12,19 +12,21 @@ use
 //
 #[ derive( Debug ) ]
 //
-pub struct BenevolentDictator
+pub struct Dictator
 {
 	seed: u64,
 	rng : ChaCha8Rng,
 }
 
 
-impl BenevolentDictator
+impl Dictator
 {
 	/// Birth place of all dictators.
 	//
 	pub fn new( seed: u64 ) -> Self
 	{
+		trace!( "Creating new dictator with seed {}", seed );
+
 		Self
 		{
 			seed,
@@ -53,6 +55,14 @@ impl BenevolentDictator
 
 		pick
 	}
+
+
+	/// Create a new random seed from entropy.
+	//
+	pub fn seed() -> u64
+	{
+		thread_rng().next_u64()
+	}
 }
 
 
@@ -66,7 +76,7 @@ mod tests
 	//
 	fn predictable()
 	{
-		let mut bd = BenevolentDictator::new( 265468510 );
+		let mut bd = Dictator::new( 265468510 );
 
 		assert!( !bd.please( "one"  , 0.4 ) );
 		assert!( !bd.please( "two"  , 0.6 ) );
