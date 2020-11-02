@@ -1,4 +1,8 @@
+- don't have magic numbers for probablilities, let the dictator choose them based on the seed.
+- add SketchyWrite
 - create and test SketchyRead and SketchyWrite.
+- verify we really use a uniform distribution.
+- consider creating a separate crate with SketchyStream, SketchySink, SketchyFuture.
 - in API docs there is two AsyncRead/Write mentions, but it isn't clear that one is for tokio. Mention which version it is in the comments.
 - try to merge tokio endpoint with normal endpoint
 - modernize examples (in readme)
