@@ -3,5 +3,4 @@
 - create and test SketchyRead and SketchyWrite.
 - verify we really use a uniform distribution.
 - consider creating a separate crate with SketchyStream, SketchySink, SketchyFuture.
-- modernize examples (in readme)
 - check code coverage for tests

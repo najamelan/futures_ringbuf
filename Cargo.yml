@@ -80,7 +80,7 @@ dev-dependencies:
   ergo-pin            : ^0.1
   tokio               : { version: ^0.3, features: [ io-util ] }
   tokio-util          : { version: ^0.5, features: [ codec, compat ] }
-
+  async-std           : { version: ^1  , features: [ attributes ] }
 
 build-dependencies:
 

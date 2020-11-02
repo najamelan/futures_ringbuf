@@ -30,6 +30,10 @@ futures-test = "^0.3.0"
 futures_codec = "^0.4"
 pretty_assertions = "^0.6"
 
+[dev-dependencies.async-std]
+features = ["attributes"]
+version = "^1"
+
 [dev-dependencies.tokio]
 features = ["io-util"]
 version = "^0.3"

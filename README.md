@@ -109,47 +109,44 @@ use
 };
 
 
-fn main()
+#[ async_std::main ]
+//
+async fn main()
 {
-   let program = async
+   let mock = RingBuffer::new( 13 );
+   let (mut writer, mut reader) = Framed::new( mock, LinesCodec{} ).split();
+
+
+   let send_task = async move
    {
-         let mock = RingBuffer::new( 13 );
-         let (mut writer, mut reader) = Framed::new( mock, LinesCodec{} ).split();
+      writer.send( "Hello World\n".to_string() ).await.expect( "send" );
+      println!( "sent first line" );
 
+      writer.send( "Second line\n".to_string() ).await.expect( "send" );
+      println!( "sent second line" );
 
-         let send_task = async move
-         {
-            writer.send( "Hello World\n".to_string() ).await.expect( "send" );
-            println!( "sent first line" );
-
-            writer.send( "Second line\n".to_string() ).await.expect( "send" );
-            println!( "sent second line" );
-
-            writer.close().await.expect( "close sender" );
-            println!( "sink closed" );
-         };
-
-
-         let receive_task = async move
-         {
-            // If we would return here, the second line will never get sent
-            // because the buffer is full.
-            //
-            // return;
-
-            while let Some(msg) = reader.next().await.transpose().expect( "receive message" )
-            {
-               println!( "Received: {:#?}", msg );
-            }
-         };
-
-
-         // Poll them in concurrently
-         //
-         join!( send_task, receive_task );
+      writer.close().await.expect( "close sender" );
+      println!( "sink closed" );
    };
 
-   block_on( program );
+
+   let receive_task = async move
+   {
+      // If we would return here, the second line will never get sent
+      // because the buffer is full.
+      //
+      // return;
+
+      while let Some(msg) = reader.next().await.transpose().expect( "receive message" )
+      {
+         println!( "Received: {:#?}", msg );
+      }
+   };
+
+
+   // Poll them in concurrently
+   //
+   join!( send_task, receive_task );
 }
 ```
 
@@ -173,7 +170,9 @@ use
 };
 
 
-fn main() { block_on( async
+#[ async_std::main ]
+//
+async fn main()
 {
    // Buffer of 10 bytes in each direction. The buffer size always refers to the writing side, so here
    // the first 10 means the server can write 10 bytes before it's buffer is full.
@@ -191,7 +190,7 @@ fn main() { block_on( async
 
    assert_eq!( n   , 3                 );
    assert_eq!( read, vec![ 1,2,3 ][..] );
-})}
+}
 ```
 
 
