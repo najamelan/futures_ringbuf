@@ -51,7 +51,7 @@ impl Endpoint
 
 
 
-impl FutAsyncR for Endpoint
+impl AsyncRead for Endpoint
 {
 	#[log_derive::logfn(Trace)]
 	//
@@ -63,7 +63,7 @@ impl FutAsyncR for Endpoint
 
 
 
-impl FutAsyncW for Endpoint
+impl AsyncWrite for Endpoint
 {
 	#[log_derive::logfn(Trace)]
 	//

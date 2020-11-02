@@ -45,12 +45,12 @@ mod import
 {
 	pub(crate) use
 	{
-		std         :: { fmt, task::Waker                                  } ,
-		ringbuf     :: { RingBuffer as SyncRingBuffer, Producer, Consumer  } ,
-		futures     :: { AsyncRead as FutAsyncR, AsyncWrite as FutAsyncW, AsyncReadExt as FutARExt } ,
-		futures::io :: { ReadHalf, WriteHalf                                                       } ,
-		futures     :: { task::noop_waker                      } ,
-		std         :: { io, pin::Pin, task::{ Context, Poll } } ,
+		std         :: { fmt, task::Waker                                 } ,
+		ringbuf     :: { RingBuffer as SyncRingBuffer, Producer, Consumer } ,
+		futures     :: { AsyncRead, AsyncWrite, AsyncReadExt              } ,
+		futures::io :: { ReadHalf, WriteHalf                              } ,
+		futures     :: { task::noop_waker                                 } ,
+		std         :: { io, pin::Pin, task::{ Context, Poll }            } ,
 	};
 
 
@@ -58,7 +58,7 @@ mod import
 	//
 	pub(crate) use
 	{
-		futures:: { AsyncWriteExt as FutAWExt } ,
+		futures           :: { AsyncWriteExt             } ,
 		pretty_assertions :: { assert_eq                 } ,
 		futures           :: { executor::block_on        } ,
 		futures_test      :: { task::{ new_count_waker } } ,

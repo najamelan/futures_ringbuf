@@ -31,9 +31,9 @@ impl<T> SketchyRead<T>
 }
 
 
-impl<T> FutAsyncR for SketchyRead<T>
+impl<T> AsyncRead for SketchyRead<T>
 
-	where T: FutAsyncR + Unpin
+	where T: AsyncRead + Unpin
 {
 	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &mut [u8] ) -> Poll< Result<usize, io::Error> >
 	{
@@ -61,7 +61,7 @@ impl<T> FutAsyncR for SketchyRead<T>
 
 
 
-impl<T> FutAsyncW for SketchyRead<T> where T: FutAsyncW + Unpin
+impl<T> AsyncWrite for SketchyRead<T> where T: AsyncWrite + Unpin
 {
 	fn poll_write( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &[u8] ) -> Poll< io::Result<usize> >
 	{
