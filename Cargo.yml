@@ -46,13 +46,7 @@ package:
 
 features:
 
-  default: [ futures_io ]
-
-  # Implement tokio AsyncRead/AsyncWrite: enable optional crate tokio
-
-  # Implement futures AsyncRead/AsyncWrite
-  #
-  futures_io: []
+  default: []
 
   sketchy: [ rand, rand_chacha ]
 
@@ -69,7 +63,6 @@ dependencies:
   #
   ringbuf    : ^0.2
   futures    : ^0.3
-  tokio      : { version: ^0.3, features: [ io-util ], optional: true }
   log        : ^0.4
   log-derive : ^0.4
 
@@ -85,7 +78,8 @@ dev-dependencies:
   futures_codec       : ^0.4
   assert_matches      : ^1
   ergo-pin            : ^0.1
-  tokio-util          : { version: ^0.5, features: [ codec ] }
+  tokio               : { version: ^0.3, features: [ io-util ] }
+  tokio-util          : { version: ^0.5, features: [ codec, compat ] }
 
 
 build-dependencies:
@@ -109,15 +103,3 @@ target:
       wasm-bindgen         : ^0.2
       wasm-bindgen-test    : ^0.3
       wasm-bindgen-futures : { version: ^0.4 }
-
-
-example:
-
-  - name             : basic
-    required-features: [ futures_io ]
-
-  - name             : endpoint
-    required-features: [ futures_io ]
-
-  - name             : tokio_endpoint
-    required-features: [ tokio ]

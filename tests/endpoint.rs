@@ -1,5 +1,3 @@
-#![ cfg( feature = "futures_io" ) ]
-//
 // Tested:
 //
 // ✔ basic sending and receiving

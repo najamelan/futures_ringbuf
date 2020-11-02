@@ -1,5 +1,3 @@
-#![ cfg( feature = "tokio" ) ]
-//
 // Tested:
 //
 // ✔ basic sending and receiving
@@ -12,7 +10,7 @@
 use
 {
 	futures_ringbuf   :: { *                                                                      } ,
-	tokio_util::codec :: { Framed, LinesCodec                                                     } ,
+	tokio_util        :: { codec::{ Framed, LinesCodec }, compat::{ FuturesAsyncReadCompatExt }   } ,
 	tokio::io         :: { AsyncRead, AsyncWrite, AsyncWriteExt, AsyncReadExt, ReadBuf            } ,
 	futures           :: { future::join, SinkExt, StreamExt, channel::oneshot, executor::block_on } ,
 	futures_test      :: { task::noop_waker                                                       } ,
@@ -27,7 +25,10 @@ use
 //
 fn basic_usage() { block_on( async
 {
-	let (mut server, mut client) = TokioEndpoint::pair( 10, 10 );
+	let (server, client) = Endpoint::pair( 10, 10 );
+
+	let mut server = server.compat();
+	let mut client = client.compat();
 
 	let     data = vec![ 1,2,3 ];
 	let mut read = [0u8;3];
@@ -44,7 +45,10 @@ fn basic_usage() { block_on( async
 //
 fn close_write()
 {
-	let (server, _client) = TokioEndpoint::pair( 10, 10 );
+	let (server, client) = Endpoint::pair( 10, 10 );
+
+	let server = server.compat();
+	let _client = client.compat();
 
 	let     waker  = noop_waker();
 	let mut cx     = Context::from_waker( &waker );
@@ -71,7 +75,11 @@ fn close_read()
 {
 	// flexi_logger::Logger::with_str( "futures_ringbuf=trace" ).start().expect( "flexi_logger");
 
-	let (server, client) = TokioEndpoint::pair( 10, 10 );
+	let (server, client) = Endpoint::pair( 10, 10 );
+
+	let server = server.compat();
+	let client = client.compat();
+
 
 	let mut pserv  = pin!( server );
 	let     pcl    = pin!( client );
@@ -99,7 +107,11 @@ fn close_read()
 //
 fn close_read_remaining() { block_on( async
 {
-	let (mut server, mut client) = TokioEndpoint::pair( 10, 10 );
+	let (server, client) = Endpoint::pair( 10, 10 );
+
+	let mut server = server.compat();
+	let mut client = client.compat();
+
 
 	let     data  = vec![ 1,2,3 ];
 	let mut read  = [0u8;3];
@@ -123,7 +135,11 @@ fn close_read_remaining() { block_on( async
 //
 fn close_wake_pending()
 {
-	let (server, client)   = TokioEndpoint::pair( 10, 10 );
+	let (server, client) = Endpoint::pair( 10, 10 );
+
+	let server = server.compat();
+	let client = client.compat();
+
 	let (sender, receiver) = oneshot::channel::<()>();
 
 	let svr = async move
@@ -158,7 +174,11 @@ fn close_wake_pending()
 //
 fn drop_wake_pending()
 {
-	let (server, mut client) = TokioEndpoint::pair( 10, 10 );
+	let (server, client) = Endpoint::pair( 10, 10 );
+
+	let server = server.compat();
+	let mut client = client.compat();
+
 	let (sender, receiver)   = oneshot::channel::<()>();
 
 	let svr = async move

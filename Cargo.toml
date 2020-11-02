@@ -23,11 +23,6 @@ version = "^0.7"
 optional = true
 version = "^0.2"
 
-[dependencies.tokio]
-features = ["io-util"]
-optional = true
-version = "^0.3"
-
 [dev-dependencies]
 assert_matches = "^1"
 ergo-pin = "^0.1"
@@ -35,25 +30,16 @@ futures-test = "^0.3.0"
 futures_codec = "^0.4"
 pretty_assertions = "^0.6"
 
+[dev-dependencies.tokio]
+features = ["io-util"]
+version = "^0.3"
+
 [dev-dependencies.tokio-util]
-features = ["codec"]
+features = ["codec", "compat"]
 version = "^0.5"
 
-[[example]]
-name = "basic"
-required-features = ["futures_io"]
-
-[[example]]
-name = "endpoint"
-required-features = ["futures_io"]
-
-[[example]]
-name = "tokio_endpoint"
-required-features = ["tokio"]
-
 [features]
-default = ["futures_io"]
-futures_io = []
+default = []
 sketchy = ["rand", "rand_chacha"]
 
 [package]
