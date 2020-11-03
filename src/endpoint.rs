@@ -51,8 +51,10 @@ impl Endpoint
 
 
 
-impl FutAsyncR for Endpoint
+impl AsyncRead for Endpoint
 {
+	#[log_derive::logfn(Trace)]
+	//
 	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &mut [u8] ) -> Poll< io::Result<usize> >
 	{
 		Pin::new( &mut self.reader ).poll_read( cx, buf )
@@ -61,21 +63,25 @@ impl FutAsyncR for Endpoint
 
 
 
-impl FutAsyncW for Endpoint
+impl AsyncWrite for Endpoint
 {
+	#[log_derive::logfn(Trace)]
+	//
 	fn poll_write( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &[u8] ) -> Poll< io::Result<usize> >
 	{
 		Pin::new( &mut self.writer ).poll_write( cx, buf )
 	}
 
-
+	#[log_derive::logfn(Trace)]
+	//
 	fn poll_flush(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll< io::Result<()> >
 	{
 		Pin::new( &mut self.writer ).poll_flush( cx )
 
 	}
 
-
+	#[log_derive::logfn(Trace)]
+	//
 	fn poll_close( mut self: Pin<&mut Self>, cx: &mut Context<'_> ) -> Poll< io::Result<()> >
 	{
 		Pin::new( &mut self.writer ).poll_close( cx )
@@ -89,9 +95,8 @@ impl Drop for Endpoint
 {
 	fn drop( &mut self )
 	{
-		// closing the ringbuffer is not an async operation. It always returns immediately,
-		// so we can fake an async operation. Note that block_on is not an option, since
-		// that can't be nested and client code might use it as well.
+		// Closing the ringbuffer is not an async operation. It always returns immediately,
+		// so we just ignore the return value of poll_close.
 		//
 		let waker  = noop_waker();
 		let mut cx = Context::from_waker( &waker );

@@ -13,16 +13,18 @@ It facilitates testing more complex situations like back pressure.
 
 It can also be used as an in memory buffer for communicating between async tasks. I haven't done benchmarks yet.
 
-There are currently 2 versions of the AsyncRead/Write traits. The _futures-rs_ version and the _tokio_ version. This crate implements both behind feature flags: `futures_io` and `tokio`. `futures_io` is enabled by default.
+There are currently 2 versions of the AsyncRead/Write traits. The _futures-rs_ version and the _tokio_ version. This crate implements the futures version. You can get the tokio version by using [`tokio_util::compat`](https://docs.rs/tokio-util/0.5.0/tokio_util/compat/index.html).
 
 Data in transit is held in an internal RingBuffer from the [ringbuf crate](https://crates.io/crates/ringbuf).
+
+When the `sketchy` feature is enabled, a type [`Sketchy`] is available that randomizes the behavior of the in memory buffers which would otherwize always be ready which isn't very realistic for testing code that will run against actual network connections later. This will randomly return pending and fill only partial buffers.
 
 ## Table of Contents
 
 - [Install](#install)
    - [Upgrade](#upgrade)
    - [Dependencies](#dependencies)
-   - [Security](#security)
+- [Security](#security)
 - [Usage](#usage)
    - [WASM](#wasm)
    - [Basic Example](#basic-example)
@@ -41,14 +43,14 @@ With [cargo yaml](https://gitlab.com/storedbox/cargo-yaml):
 ```yaml
 dependencies:
 
-   futures_ringbuf: ^0.1
+   futures_ringbuf: ^0.3
 ```
 
 With raw Cargo.toml
 ```toml
 [dependencies]
 
-    futures_ringbuf = "^0.1"
+    futures_ringbuf = "^0.3"
 ```
 
 ### Upgrade
@@ -63,9 +65,9 @@ This crate has few dependencies. Cargo will automatically handle it's dependenci
 There are no optional features.
 
 
-### Security
+## Security
 
-This crate uses `#![ forbid( unsafe_code ) ]`, but it's dependencies use quite some unsafe. On first sight the unsafe usage in `ringbuf` looks sound, but I haven't scrutinized every detail of it and it's not documented.
+This crate uses `#![ forbid(unsafe_code) ]`, but it's dependencies use quite some unsafe. On first sight the unsafe usage in `ringbuf` looks sound, but I haven't scrutinized every detail of it and it's not documented.
 A lot of unsafe code is present in the futures library, which I haven't reviewed.
 
 
@@ -90,7 +92,7 @@ If you want to seed the buffer before using it with futures_ringbuf, you can use
 
 ### WASM
 
-This crate works on WASM. See the [integration test](https://github.com/najamelan/futures_ringbuf/tree/master/test/wasm.rs) for WASM for some code.
+This crate works on WASM. See the [integration test](https://github.com/najamelan/futures_ringbuf/tree/master/test/wasm.rs) for some code.
 
 
 ### Basic example
@@ -109,47 +111,44 @@ use
 };
 
 
-fn main()
+#[ async_std::main ]
+//
+async fn main()
 {
-   let program = async
+   let mock = RingBuffer::new( 13 );
+   let (mut writer, mut reader) = Framed::new( mock, LinesCodec{} ).split();
+
+
+   let send_task = async move
    {
-         let mock = RingBuffer::new( 13 );
-         let (mut writer, mut reader) = Framed::new( mock, LinesCodec{} ).split();
+      writer.send( "Hello World\n".to_string() ).await.expect( "send" );
+      println!( "sent first line" );
 
+      writer.send( "Second line\n".to_string() ).await.expect( "send" );
+      println!( "sent second line" );
 
-         let send_task = async move
-         {
-            writer.send( "Hello World\n".to_string() ).await.expect( "send" );
-            println!( "sent first line" );
-
-            writer.send( "Second line\n".to_string() ).await.expect( "send" );
-            println!( "sent second line" );
-
-            writer.close().await.expect( "close sender" );
-            println!( "sink closed" );
-         };
-
-
-         let receive_task = async move
-         {
-            // If we would return here, the second line will never get sent
-            // because the buffer is full.
-            //
-            // return;
-
-            while let Some(msg) = reader.next().await.transpose().expect( "receive message" )
-            {
-               println!( "Received: {:#?}", msg );
-            }
-         };
-
-
-         // Poll them in concurrently
-         //
-         join!( send_task, receive_task );
+      writer.close().await.expect( "close sender" );
+      println!( "sink closed" );
    };
 
-   block_on( program );
+
+   let receive_task = async move
+   {
+      // If we would return here, the second line will never get sent
+      // because the buffer is full.
+      //
+      // return;
+
+      while let Some(msg) = reader.next().await.transpose().expect( "receive message" )
+      {
+         println!( "Received: {:#?}", msg );
+      }
+   };
+
+
+   // Poll them in concurrently
+   //
+   join!( send_task, receive_task );
 }
 ```
 
@@ -159,8 +158,6 @@ fn main()
 When using one ringbuffer, we get both ends of one connection. If we want a more realistic duplex connection, we
 need two ringbuffers, with one endpoint reading from the ringbuffer the other endpoint is writing to. Tasks need
 to be woken up correctly when new data or space becomes available... To facilitate this, an `Endpoint` type is provided which will take care of this setup for you.
-
-Note: it wasn't convenient to implement a tokio version in the same type, so a new type is introduced, [TokioEndpoint].
 
 
 ### Endpoint example
@@ -173,7 +170,9 @@ use
 };
 
 
-fn main() { block_on( async
+#[ async_std::main ]
+//
+async fn main()
 {
    // Buffer of 10 bytes in each direction. The buffer size always refers to the writing side, so here
    // the first 10 means the server can write 10 bytes before it's buffer is full.
@@ -191,7 +190,7 @@ fn main() { block_on( async
 
    assert_eq!( n   , 3                 );
    assert_eq!( read, vec![ 1,2,3 ][..] );
-})}
+}
 ```
 
 

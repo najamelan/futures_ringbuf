@@ -2,7 +2,7 @@ use crate::{ import::*, RingBuffer };
 
 
 
-impl FutAsyncW for RingBuffer<u8>
+impl AsyncWrite for RingBuffer<u8>
 {
 	/// Will return Poll::Pending when the buffer is full. AsyncRead impl will wake up this task
 	/// when new place is made.
@@ -102,7 +102,7 @@ mod tests
 		// write 1
 		//
 		let arr = [ b'a' ];
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		AsyncWriteExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		assert!( !ring.is_empty() );
 		assert!( !ring.is_full()  );
@@ -119,10 +119,10 @@ mod tests
 		// write 2
 		//
 		let arr = [ b'b' ];
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		AsyncWriteExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		let arr = [ b'c' ];
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		AsyncWriteExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		assert!( !ring.is_empty() );
 		assert!(  ring.is_full()  );
@@ -140,17 +140,17 @@ mod tests
 		// write 3
 		//
 		let arr = [ b'd' ];
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		AsyncWriteExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		let arr = [ b'e' ];
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		AsyncWriteExt::write( &mut ring, &arr ).await.expect( "write" );
 
 
 		let (waker, count) = new_count_waker();
 		let mut cx = Context::from_waker( &waker );
 
 		let arr = [ b'f' ];
-		assert!( FutAsyncW::poll_write( Pin::new( &mut ring ), &mut cx, &arr ).is_pending() );
+		assert!( AsyncWrite::poll_write( Pin::new( &mut ring ), &mut cx, &arr ).is_pending() );
 
 		assert!( !ring.is_empty() );
 		assert!(  ring.is_full()  );
@@ -163,7 +163,7 @@ mod tests
 		// Pop 1 and try writing again
 		//
 		let mut read_buf = [0u8;1];
-		assert_eq!( 1, FutARExt::read( &mut ring, &mut read_buf ).await.unwrap() );
+		assert_eq!( 1, AsyncReadExt::read( &mut ring, &mut read_buf ).await.unwrap() );
 
 		assert_eq!( b'd', read_buf[0] );
 
@@ -177,7 +177,7 @@ mod tests
 		assert_eq!( ring.remaining(), 1 );
 
 
-		FutAWExt::write( &mut ring, &arr ).await.expect( "write" );
+		AsyncWriteExt::write( &mut ring, &arr ).await.expect( "write" );
 
 		assert!( !ring.is_empty() );
 		assert!(  ring.is_full()  );
@@ -200,7 +200,7 @@ mod tests
 
 		let mut read_buf = [0u8;1];
 
-		assert!( FutAsyncR::poll_read( Pin::new( &mut ring ), &mut cx, &mut read_buf ).is_pending() );
+		assert!( AsyncRead::poll_read( Pin::new( &mut ring ), &mut cx, &mut read_buf ).is_pending() );
 
 		assert!( ring.read_waker .is_some() );
 		assert!( ring.write_waker.is_none() );
@@ -221,10 +221,10 @@ mod tests
 		ring.close().await.unwrap();
 
 		let arr = [ b'a' ];
-		assert_eq!( FutAWExt::write( &mut ring, &arr ).await.unwrap_err().kind(), io::ErrorKind::NotConnected );
+		assert_eq!( AsyncWriteExt::write( &mut ring, &arr ).await.unwrap_err().kind(), io::ErrorKind::NotConnected );
 
 		// Should be the same
 		//
-		assert_eq!( FutAWExt::write( &mut ring, &arr ).await.unwrap_err().kind(), io::ErrorKind::NotConnected );
+		assert_eq!( AsyncWriteExt::write( &mut ring, &arr ).await.unwrap_err().kind(), io::ErrorKind::NotConnected );
 	})}
 }

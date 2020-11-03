@@ -1,4 +1,4 @@
-#![ cfg(all( target_arch="wasm32", feature="tokio" )) ]
+#![ cfg( target_arch="wasm32" ) ]
 
 
 // Verify basic functionality on wasm
@@ -9,11 +9,12 @@
 //
 use
 {
-	wasm_bindgen_test    :: { *                                 } ,
-	wasm_bindgen_futures :: { spawn_local                       } ,
-	futures_ringbuf      :: { *                                 } ,
-	futures              :: { SinkExt, StreamExt, future::ready } ,
-	tokio_util::codec    :: { Framed, LinesCodec                } ,
+	wasm_bindgen_test    :: { *                                                                    } ,
+	wasm_bindgen_futures :: { spawn_local                                                          } ,
+	futures_ringbuf      :: { *                                                                    } ,
+	futures              :: { SinkExt, StreamExt, future::ready                                    } ,
+	tokio_util           :: { codec::{ Framed, LinesCodec }, compat::{ FuturesAsyncReadCompatExt } } ,
+
 };
 
 wasm_bindgen_test_configure!(run_in_browser);
@@ -24,7 +25,7 @@ wasm_bindgen_test_configure!(run_in_browser);
 //
 fn basic_example_tokio()
 {
-	let mock = RingBuffer::new( 13 );
+	let mock = RingBuffer::new( 13 ).compat();
 	let (mut writer, reader) = Framed::new( mock, LinesCodec::new() ).split();
 
 

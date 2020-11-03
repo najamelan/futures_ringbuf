@@ -1,4 +1,4 @@
-#![ cfg(all( target_arch="wasm32", feature="futures_io" )) ]
+#![ cfg( target_arch="wasm32" ) ]
 
 
 // Verify basic functionality on wasm

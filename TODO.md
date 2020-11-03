@@ -1,1 +1,3 @@
+- create Sketchy that implements all futures traits if the inner type implements them. Missing Future, Stream, Sink.
+- test Sketchy.
 - check code coverage for tests

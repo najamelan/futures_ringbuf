@@ -1,5 +1,11 @@
 # futures_ringbuf
 
+## 0.3.0 - 2020-11-03
+
+- **BREAKING CHANGE**: Get rid of tokio version of traits in favor of `tokio_util::compat`.
+- **BREAKING CHANGE**: Get rid of feature flags.
+- Add `Sketchy`.
+
 ## 0.2.1 - 2020-04-15
 
 - Update to futures_codec 0.4.

@@ -7,14 +7,19 @@ status = "actively-developed"
 repository = "najamelan/futures_ringbuf"
 
 [build-dependencies]
-rustc_version = "^0.2"
+rustc_version = "^0.3"
 
 [dependencies]
 futures = "^0.3"
+log = "^0.4"
+log-derive = "^0.4"
 ringbuf = "^0.2"
 
-[dependencies.tokio]
-features = ["io-util"]
+[dependencies.rand]
+optional = true
+version = "^0.7"
+
+[dependencies.rand_chacha]
 optional = true
 version = "^0.2"
 
@@ -25,25 +30,21 @@ futures-test = "^0.3.0"
 futures_codec = "^0.4"
 pretty_assertions = "^0.6"
 
+[dev-dependencies.async-std]
+features = ["attributes"]
+version = "^1"
+
+[dev-dependencies.tokio]
+features = ["io-util"]
+version = "^0.3"
+
 [dev-dependencies.tokio-util]
-features = ["codec"]
-version = "^0.2"
-
-[[example]]
-name = "basic"
-required-features = ["futures_io"]
-
-[[example]]
-name = "endpoint"
-required-features = ["futures_io"]
-
-[[example]]
-name = "tokio_endpoint"
-required-features = ["tokio"]
+features = ["codec", "compat"]
+version = "^0.5"
 
 [features]
-default = ["futures_io"]
-futures_io = []
+default = []
+sketchy = ["rand", "rand_chacha"]
 
 [package]
 authors = ["Naja Melan <najamelan@autistici.org>"]
@@ -57,7 +58,7 @@ license = "Unlicense"
 name = "futures_ringbuf"
 readme = "README.md"
 repository = "https://github.com/najamelan/futures_ringbuf"
-version = "0.2.1"
+version = "0.3.0"
 
 [package.metadata]
 [package.metadata.docs]
