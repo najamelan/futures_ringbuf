@@ -21,7 +21,8 @@ pub struct Dictator
 
 impl Dictator
 {
-	/// Birth place of all dictators.
+	/// Birth place of all dictators. This method will log the seed with log::trace.
+	/// Make sure you turn on logging for the futures_ringbuf crate so you can reproduce failing tests.
 	//
 	pub fn new( seed: u64 ) -> Self
 	{

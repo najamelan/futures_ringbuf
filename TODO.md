@@ -1,5 +1,3 @@
-- don't have magic numbers for probablilities, let the dictator choose them based on the seed.
-- create Sketchy that implements all futures traits if the inner type implements them.
-- verify we really use a uniform distribution.
-- consider creating a separate crate with SketchyStream, SketchySink, SketchyFuture.
+- create Sketchy that implements all futures traits if the inner type implements them. Missing Future, Stream, Sink.
+- test Sketchy.
 - check code coverage for tests
