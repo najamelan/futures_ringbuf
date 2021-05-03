@@ -48,7 +48,7 @@ features:
 
   default: []
 
-  sketchy: [ rand, rand_chacha ]
+  sketchy: [ rand, rand_chacha, getrandom ]
 
 
 badges:
@@ -97,6 +97,10 @@ profile:
 target:
 
   'cfg(target_arch = "wasm32")':
+
+    dependencies:
+
+      getrandom: { version: ^0.2, features: [ js ], optional: true }
 
     dev-dependencies:
 

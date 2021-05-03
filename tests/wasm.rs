@@ -13,7 +13,7 @@ use
 	wasm_bindgen_futures :: { spawn_local                       } ,
 	futures_ringbuf      :: { *                                 } ,
 	futures              :: { SinkExt, StreamExt, future::ready } ,
-	futures_codec        :: { Framed, LinesCodec                } ,
+	asynchronous_codec   :: { Framed, LinesCodec                } ,
 };
 
 wasm_bindgen_test_configure!(run_in_browser);
