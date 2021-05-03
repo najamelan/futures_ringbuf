@@ -9,14 +9,14 @@
 //
 use
 {
-	futures_ringbuf :: { *                                                                      } ,
-	futures_codec   :: { Framed, LinesCodec                                                     } ,
-	futures         :: { AsyncRead, AsyncWrite, AsyncWriteExt, AsyncReadExt, executor::block_on } ,
-	futures         :: { future::join, SinkExt, StreamExt, channel::oneshot                     } ,
-	futures_test    :: { task::noop_waker                                                       } ,
-	assert_matches  :: { assert_matches                                                         } ,
-	std             :: { task::{ Poll, Context }                                                } ,
-	ergo_pin        :: { ergo_pin                                                               } ,
+	futures_ringbuf    :: { *                                                                      } ,
+	asynchronous_codec :: { Framed, LinesCodec                                                     } ,
+	futures            :: { AsyncRead, AsyncWrite, AsyncWriteExt, AsyncReadExt, executor::block_on } ,
+	futures            :: { future::join, SinkExt, StreamExt, channel::oneshot                     } ,
+	futures_test       :: { task::noop_waker                                                       } ,
+	assert_matches     :: { assert_matches                                                         } ,
+	std                :: { task::{ Poll, Context }                                                } ,
+	ergo_pin           :: { ergo_pin                                                               } ,
 };
 
 

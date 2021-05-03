@@ -1,9 +1,9 @@
 use
 {
 	rand        :: { Rng, RngCore, thread_rng, SeedableRng, distributions::uniform::SampleUniform } ,
-	rand_chacha :: { ChaCha8Rng                                              } ,
-	std         :: { ops::Range, fmt                                         } ,
-	log         :: { *                                                       } ,
+	rand_chacha :: { ChaCha8Rng                                                                   } ,
+	std         :: { ops::Range, fmt                                                              } ,
+	log         :: { *                                                                            } ,
 };
 
 
@@ -48,9 +48,9 @@ impl Dictator
 
 	/// Ask the dictator to pick from a range of values.
 	//
-	pub fn pick<Idx: SampleUniform + fmt::Debug + Copy>( &mut self, what: &str, range: Range<Idx> ) -> Idx
+	pub fn pick<Idx: SampleUniform + fmt::Debug + Copy + PartialOrd>( &mut self, what: &str, range: Range<Idx> ) -> Idx
 	{
-		let pick = self.rng.gen_range( range.start, range.end );
+		let pick = self.rng.gen_range( range.clone() );
 
 		trace!( "dictator pick {} from {:?}, answer: {:?}", what, range, pick );
 

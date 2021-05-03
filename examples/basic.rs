@@ -5,9 +5,9 @@
 //
 use
 {
-	futures_ringbuf :: { *                                            } ,
-	futures         :: { SinkExt, StreamExt, executor::block_on, join } ,
-	futures_codec   :: { Framed, LinesCodec                           } ,
+	futures_ringbuf    :: { *                                            } ,
+	futures            :: { SinkExt, StreamExt, executor::block_on, join } ,
+	asynchronous_codec :: { Framed, LinesCodec                           } ,
 };
 
 fn main()

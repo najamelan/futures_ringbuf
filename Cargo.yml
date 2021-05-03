@@ -68,18 +68,18 @@ dependencies:
 
   # private deps
   #
-  rand       : { version: ^0.7, optional: true }
-  rand_chacha: { version: ^0.2, optional: true }
+  rand       : { version: ^0.8, optional: true }
+  rand_chacha: { version: ^0.3, optional: true }
 
 dev-dependencies:
 
   pretty_assertions   : ^0.6
   futures-test        : ^0.3.0
-  futures_codec       : ^0.4
+  asynchronous-codec  : ^0.6
   assert_matches      : ^1
   ergo-pin            : ^0.1
-  tokio               : { version: ^0.3, features: [ io-util ] }
-  tokio-util          : { version: ^0.5, features: [ codec, compat ] }
+  tokio               : { version: ^1, features: [ io-util ] }
+  tokio-util          : { version: ^0.6, features: [ codec, compat ] }
   async-std           : { version: ^1  , features: [ attributes ] }
 
 build-dependencies:
