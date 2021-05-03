@@ -58,7 +58,7 @@ fn close_write()
 	match res
 	{
 		Poll::Ready( Err(e) ) => assert_eq!( e.kind(), std::io::ErrorKind::NotConnected ) ,
-		_                     => assert!( false, "poll_write should return error: {:?}", res ),
+		_                     => panic!( "poll_write should return error: {:?}", res ),
 	}
 }
 
