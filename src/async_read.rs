@@ -13,7 +13,7 @@ impl AsyncRead for RingBuffer<u8>
 	//
 	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, dst: &mut [u8] ) -> Poll< Result<usize, io::Error> >
 	{
-		if dst.len() == 0
+		if dst.is_empty()
 		{
 			return Poll::Ready( Ok(0) );
 		}
@@ -33,23 +33,20 @@ impl AsyncRead for RingBuffer<u8>
 			Poll::Ready( Ok(read) )
 		}
 
+		else if self.closed
+		{
+			// Signals end of stream.
+			//
+			Ok(0).into()
+		}
+
 		else
 		{
-			if self.closed
-			{
-				// Signals end of stream.
-				//
-				Ok(0).into()
-			}
+			// Store this waker so that the writer can wake us up after they wrote something.
+			//
+			self.read_waker.replace( cx.waker().clone() );
 
-			else
-			{
-				// Store this waker so that the writer can wake us up after they wrote something.
-				//
-				self.read_waker.replace( cx.waker().clone() );
-
-				Poll::Pending
-			}
+			Poll::Pending
 		}
 	}
 }

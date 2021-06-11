@@ -7,7 +7,7 @@ status = "actively-developed"
 repository = "najamelan/futures_ringbuf"
 
 [build-dependencies]
-rustc_version = "^0.3"
+rustc_version = "^0.4"
 
 [dependencies]
 futures = "^0.3"
@@ -17,18 +17,18 @@ ringbuf = "^0.2"
 
 [dependencies.rand]
 optional = true
-version = "^0.7"
+version = "^0.8"
 
 [dependencies.rand_chacha]
 optional = true
-version = "^0.2"
+version = "^0.3"
 
 [dev-dependencies]
 assert_matches = "^1"
+asynchronous-codec = "^0.6"
 ergo-pin = "^0.1"
 futures-test = "^0.3.0"
-futures_codec = "^0.4"
-pretty_assertions = "^0.6"
+pretty_assertions = "^0.7"
 
 [dev-dependencies.async-std]
 features = ["attributes"]
@@ -36,15 +36,15 @@ version = "^1"
 
 [dev-dependencies.tokio]
 features = ["io-util"]
-version = "^0.3"
+version = "^1"
 
 [dev-dependencies.tokio-util]
 features = ["codec", "compat"]
-version = "^0.5"
+version = "^0.6"
 
 [features]
 default = []
-sketchy = ["rand", "rand_chacha"]
+sketchy = ["rand", "rand_chacha", "getrandom"]
 
 [package]
 authors = ["Naja Melan <najamelan@autistici.org>"]
@@ -58,7 +58,8 @@ license = "Unlicense"
 name = "futures_ringbuf"
 readme = "README.md"
 repository = "https://github.com/najamelan/futures_ringbuf"
-version = "0.3.0"
+resolver = "2"
+version = "0.3.1"
 
 [package.metadata]
 [package.metadata.docs]
@@ -72,6 +73,12 @@ codegen-units = 1
 
 [target]
 [target."cfg(target_arch = \"wasm32\")"]
+[target."cfg(target_arch = \"wasm32\")".dependencies]
+[target."cfg(target_arch = \"wasm32\")".dependencies.getrandom]
+features = ["js"]
+optional = true
+version = "^0.2"
+
 [target."cfg(target_arch = \"wasm32\")".dev-dependencies]
 wasm-bindgen = "^0.2"
 wasm-bindgen-test = "^0.3"

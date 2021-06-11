@@ -6,11 +6,12 @@ use
 	futures_ringbuf :: { *                                     } ,
 	tokio::io       :: { AsyncWriteExt, AsyncReadExt           } ,
 	tokio_util      :: { compat::{ FuturesAsyncReadCompatExt } } ,
-	futures         :: { executor::block_on                    } ,
 };
 
 
-fn main() { block_on( async
+#[async_std::main]
+//
+async fn main()
 {
 	// Buffer of 10 bytes in each direction.
 	// When it's full it will return pending on writing and when it's empty it returns
@@ -32,4 +33,4 @@ fn main() { block_on( async
 	let n = client.read( &mut read ).await.expect( "read" );
 	assert_eq!( n   , 3                 );
 	assert_eq!( read, vec![ 1,2,3 ][..] );
-})}
+}

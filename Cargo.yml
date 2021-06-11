@@ -24,7 +24,7 @@ package:
   # - `git tag x.x.x` with version number.
   # - `git push && git push --tags`
   #
-  version       : 0.3.0
+  version       : 0.3.1
   name          : futures_ringbuf
   authors       : [ Naja Melan <najamelan@autistici.org> ]
   description   : Mock Type implementing AsyncRead/AsyncWrite for testing and examples.
@@ -34,7 +34,8 @@ package:
   keywords      : [ futures, mocking, stream, testing, async ]
   categories    : [ asynchronous, network-programming, "development-tools::testing" ]
   license       : Unlicense
-  edition       : "2018"
+  edition       : '2018'
+  resolver      : '2'
   exclude       : [ ci, .travis.yml, TODO.md ]
 
   metadata:
@@ -48,7 +49,7 @@ features:
 
   default: []
 
-  sketchy: [ rand, rand_chacha ]
+  sketchy: [ rand, rand_chacha, getrandom ]
 
 
 badges:
@@ -68,23 +69,23 @@ dependencies:
 
   # private deps
   #
-  rand       : { version: ^0.7, optional: true }
-  rand_chacha: { version: ^0.2, optional: true }
+  rand       : { version: ^0.8, optional: true }
+  rand_chacha: { version: ^0.3, optional: true }
 
 dev-dependencies:
 
-  pretty_assertions   : ^0.6
+  pretty_assertions   : ^0.7
   futures-test        : ^0.3.0
-  futures_codec       : ^0.4
+  asynchronous-codec  : ^0.6
   assert_matches      : ^1
   ergo-pin            : ^0.1
-  tokio               : { version: ^0.3, features: [ io-util ] }
-  tokio-util          : { version: ^0.5, features: [ codec, compat ] }
+  tokio               : { version: ^1, features: [ io-util ] }
+  tokio-util          : { version: ^0.6, features: [ codec, compat ] }
   async-std           : { version: ^1  , features: [ attributes ] }
 
 build-dependencies:
 
-  rustc_version: ^0.3
+  rustc_version: ^0.4
 
 
 profile:
@@ -97,6 +98,10 @@ profile:
 target:
 
   'cfg(target_arch = "wasm32")':
+
+    dependencies:
+
+      getrandom: { version: ^0.2, features: [ js ], optional: true }
 
     dev-dependencies:
 
