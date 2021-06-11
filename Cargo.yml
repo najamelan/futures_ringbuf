@@ -73,7 +73,7 @@ dependencies:
 
 dev-dependencies:
 
-  pretty_assertions   : ^0.6
+  pretty_assertions   : ^0.7
   futures-test        : ^0.3.0
   asynchronous-codec  : ^0.6
   assert_matches      : ^1
@@ -84,7 +84,7 @@ dev-dependencies:
 
 build-dependencies:
 
-  rustc_version: ^0.3
+  rustc_version: ^0.4
 
 
 profile:

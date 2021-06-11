@@ -7,7 +7,7 @@ status = "actively-developed"
 repository = "najamelan/futures_ringbuf"
 
 [build-dependencies]
-rustc_version = "^0.3"
+rustc_version = "^0.4"
 
 [dependencies]
 futures = "^0.3"
@@ -28,7 +28,7 @@ assert_matches = "^1"
 asynchronous-codec = "^0.6"
 ergo-pin = "^0.1"
 futures-test = "^0.3.0"
-pretty_assertions = "^0.6"
+pretty_assertions = "^0.7"
 
 [dev-dependencies.async-std]
 features = ["attributes"]
