@@ -24,7 +24,7 @@ package:
   # - `git tag x.x.x` with version number.
   # - `git push && git push --tags`
   #
-  version       : 0.3.0
+  version       : 0.3.1
   name          : futures_ringbuf
   authors       : [ Naja Melan <najamelan@autistici.org> ]
   description   : Mock Type implementing AsyncRead/AsyncWrite for testing and examples.
@@ -34,7 +34,8 @@ package:
   keywords      : [ futures, mocking, stream, testing, async ]
   categories    : [ asynchronous, network-programming, "development-tools::testing" ]
   license       : Unlicense
-  edition       : "2018"
+  edition       : '2018'
+  resolver      : '2'
   exclude       : [ ci, .travis.yml, TODO.md ]
 
   metadata:
