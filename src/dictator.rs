@@ -58,9 +58,17 @@ impl Dictator
 	}
 
 
+	/// Return the seed used when creating this Dictator.
+	//
+	pub fn seed(&self) -> u64
+	{
+		self.seed
+	}
+
+
 	/// Create a new random seed from entropy.
 	//
-	pub fn seed() -> u64
+	pub fn new_seed() -> u64
 	{
 		thread_rng().next_u64()
 	}
@@ -77,7 +85,8 @@ mod tests
 	//
 	fn predictable()
 	{
-		let mut bd = Dictator::new( 265468510 );
+		let seed = 265468510;
+		let mut bd = Dictator::new( seed );
 
 		assert!( !bd.please( "one"  , 0.4 ) );
 		assert!( !bd.please( "two"  , 0.6 ) );
@@ -97,5 +106,7 @@ mod tests
 		assert!(  bd.please( "fourteen", 0.5 ) );
 		assert!(  bd.please( "fifteen" , 0.5 ) );
 		assert!( !bd.please( "sixteen" , 0.5 ) );
+
+		assert_eq!( seed, bd.seed() );
 	}
 }
