@@ -28,7 +28,7 @@ assert_matches = "^1"
 asynchronous-codec = "^0.6"
 ergo-pin = "^0.1"
 futures-test = "^0.3.0"
-pretty_assertions = "^0.7"
+pretty_assertions = "^1"
 
 [dev-dependencies.async-std]
 features = ["attributes"]
