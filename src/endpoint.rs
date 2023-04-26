@@ -53,11 +53,13 @@ impl Endpoint
 
 impl AsyncRead for Endpoint
 {
-	#[log_derive::logfn(Trace)]
-	//
 	fn poll_read( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &mut [u8] ) -> Poll< io::Result<usize> >
 	{
-		Pin::new( &mut self.reader ).poll_read( cx, buf )
+		let poll = Pin::new(&mut self.reader).poll_read(cx, buf);
+
+		log::trace!("poll_read() => {:?}", poll);
+
+		poll
 	}
 }
 
@@ -65,26 +67,32 @@ impl AsyncRead for Endpoint
 
 impl AsyncWrite for Endpoint
 {
-	#[log_derive::logfn(Trace)]
-	//
 	fn poll_write( mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &[u8] ) -> Poll< io::Result<usize> >
 	{
-		Pin::new( &mut self.writer ).poll_write( cx, buf )
+		let poll = Pin::new(&mut self.writer).poll_write(cx, buf);
+
+		log::trace!("poll_write() => {:?}", poll);
+
+		poll
 	}
 
-	#[log_derive::logfn(Trace)]
-	//
 	fn poll_flush(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll< io::Result<()> >
 	{
-		Pin::new( &mut self.writer ).poll_flush( cx )
+		let poll = Pin::new(&mut self.writer).poll_flush(cx);
+
+		log::trace!("poll_flush() => {:?}", poll);
+
+		poll
 
 	}
 
-	#[log_derive::logfn(Trace)]
-	//
 	fn poll_close( mut self: Pin<&mut Self>, cx: &mut Context<'_> ) -> Poll< io::Result<()> >
 	{
-		Pin::new( &mut self.writer ).poll_close( cx )
+		let poll = Pin::new(&mut self.writer).poll_close(cx);
+
+		log::trace!("poll_close() => {:?}", poll);
+
+		poll
 	}
 }
 
