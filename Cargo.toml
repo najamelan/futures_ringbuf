@@ -13,7 +13,7 @@ rustc_version = "^0.4"
 futures = "^0.3"
 log = "^0.4"
 log-derive = "^0.4"
-ringbuf = "^0.2"
+ringbuf = "^0.3"
 
 [dependencies.rand]
 optional = true
