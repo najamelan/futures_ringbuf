@@ -8,7 +8,7 @@
 
 > A ringbuffer that implements AsyncRead/AsyncWrite.
 
-It can be used for testing async network crates cross platform without having to make TCP connections. The crate provides a type `Endpoint` which allows creating both ends of a fake network stream with a ringbuffer in each direction.
+It can be used for testing async network crates cross-platform without having to make TCP connections. The crate provides a type `Endpoint` which allows creating both ends of a fake network stream with a ringbuffer in each direction.
 It facilitates testing more complex situations like back pressure.
 
 It can also be used as an in memory buffer for communicating between async tasks. I haven't done benchmarks yet.
@@ -17,7 +17,7 @@ There are currently 2 versions of the AsyncRead/Write traits. The _futures-rs_ v
 
 Data in transit is held in an internal RingBuffer from the [ringbuf crate](https://crates.io/crates/ringbuf).
 
-When the `sketchy` feature is enabled, a type [`Sketchy`] is available that randomizes the behavior of the in memory buffers which would otherwize always be ready which isn't very realistic for testing code that will run against actual network connections later. This will randomly return pending and fill only partial buffers.
+When the `sketchy` feature is enabled, a type [`Sketchy`] is available that randomizes the behavior of the in memory buffers which would otherwise always be ready which isn't very realistic for testing code that will run against actual network connections later. This will randomly return pending and fill only partial buffers.
 
 ## Table of Contents
 
@@ -60,7 +60,7 @@ Please check out the [changelog](https://github.com/najamelan/futures_ringbuf/bl
 
 ### Dependencies
 
-This crate has few dependencies. Cargo will automatically handle it's dependencies for you.
+This crate has few dependencies. Cargo will automatically handle its dependencies for you.
 
 There are no optional features.
 
