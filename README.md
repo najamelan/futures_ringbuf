@@ -8,16 +8,16 @@
 
 > A ringbuffer that implements AsyncRead/AsyncWrite.
 
-It can be used for testing async network crates cross platform without having to make TCP connections. The crate provides a type `Endpoint` which allows creating both ends of a fake network stream with a ringbuffer in each direction.
+It can be used for testing async network crates cross-platform without having to make TCP connections. The crate provides a type `Endpoint` which allows creating both ends of a fake network stream with a ringbuffer in each direction.
 It facilitates testing more complex situations like back pressure.
 
 It can also be used as an in memory buffer for communicating between async tasks. I haven't done benchmarks yet.
 
-There are currently 2 versions of the AsyncRead/Write traits. The _futures-rs_ version and the _tokio_ version. This crate implements the futures version. You can get the tokio version by using [`tokio_util::compat`](https://docs.rs/tokio-util/0.5.0/tokio_util/compat/index.html).
+There are currently 2 versions of the AsyncRead/Write traits. The _futures-rs_ version and the _tokio_ version. This crate implements the futures version. You can get the tokio version by using [`tokio_util::compat`](https://docs.rs/tokio-util/latest/tokio_util/compat/index.html).
 
 Data in transit is held in an internal RingBuffer from the [ringbuf crate](https://crates.io/crates/ringbuf).
 
-When the `sketchy` feature is enabled, a type [`Sketchy`] is available that randomizes the behavior of the in memory buffers which would otherwize always be ready which isn't very realistic for testing code that will run against actual network connections later. This will randomly return pending and fill only partial buffers.
+When the `sketchy` feature is enabled, a type [`Sketchy`] is available that randomizes the behavior of the in memory buffers which would otherwise always be ready which isn't very realistic for testing code that will run against actual network connections later. This will randomly return pending and fill only partial buffers.
 
 ## Table of Contents
 
@@ -43,14 +43,14 @@ With [cargo yaml](https://gitlab.com/storedbox/cargo-yaml):
 ```yaml
 dependencies:
 
-   futures_ringbuf: ^0.3
+   futures_ringbuf: ^0.4
 ```
 
 With raw Cargo.toml
 ```toml
 [dependencies]
 
-    futures_ringbuf = "^0.3"
+    futures_ringbuf = "^0.4"
 ```
 
 ### Upgrade
@@ -60,10 +60,11 @@ Please check out the [changelog](https://github.com/najamelan/futures_ringbuf/bl
 
 ### Dependencies
 
-This crate has few dependencies. Cargo will automatically handle it's dependencies for you.
+This crate has few dependencies. Cargo will automatically handle its dependencies for you.
 
-There are no optional features.
+### Features
 
+The `sketchy` feature will turn on the `Sketchy` type which allows randomly changing the behavior of an async stream to enable testing situations that occur on an actual network like timing out, processing only partial buffers, pending, ...
 
 ## Security
 

@@ -28,7 +28,7 @@ async fn main()
 	let     data = vec![ 1,2,3 ];
 	let mut read = [0u8;3];
 
-	server.write( &data ).await.expect( "write" );
+	server.write_all( &data ).await.expect( "write" );
 
 	let n = client.read( &mut read ).await.expect( "read" );
 	assert_eq!( n   , 3                 );

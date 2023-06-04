@@ -2,7 +2,21 @@
 
 ## [Unreleased]
 
-  [Unreleased]: https://github.com/najamelan/futures_ringbuf/compare/0.3.1...dev
+  [Unreleased]: https://github.com/najamelan/futures_ringbuf/compare/0.4...dev
+
+## [0.4.0]
+
+  [0.4.0]: https://github.com/najamelan/futures_ringbuf/compare/0.3.1...0.4.0
+  
+### Added 
+
+  - **BREAKING CHANGE**: Update dependencies, including _ringbuf_ to version `0.3` and 
+    _tokio-util_ to version `0.7`.
+  - `Dictator.seed` method to read the seed used on creation.
+  
+### Changed 
+
+  - Renamed `Dictator::seed` method to `new_seed`.
 
 ## [0.3.1]
 

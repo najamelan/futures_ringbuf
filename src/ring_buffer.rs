@@ -1,5 +1,7 @@
 use crate::import::*;
 
+type Producer<T> = ringbuf::HeapProducer<T>;
+type Consumer<T> = ringbuf::HeapConsumer<T>;
 
 /// A RingBuffer that implements `AsyncRead` and `AsyncWrite` from the futures library.
 ///
@@ -79,7 +81,7 @@ impl<T: Sized + Copy> RingBuffer<T>
 	//
 	pub fn remaining(&self) -> usize
 	{
-		self.producer.remaining()
+		self.producer.free_len()
 	}
 }
 

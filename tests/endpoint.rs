@@ -30,7 +30,7 @@ fn basic_usage() { block_on( async
 	let     data = vec![ 1,2,3 ];
 	let mut read = [0u8;3];
 
-	server.write( &data ).await.expect( "write" );
+	server.write_all( &data ).await.expect( "write" );
 
 	let n = client.read( &mut read ).await.expect( "read" );
 	assert_eq!( n   , 3                 );
@@ -100,7 +100,7 @@ fn close_read_remaining() { block_on( async
 	let mut read  = [0u8;3];
 	let mut read2 = [0u8;3];
 
-	server.write( &data ).await.expect( "write" );
+	server.write_all( &data ).await.expect( "write" );
 	server.close().await.expect( "close" );
 
 	let n = client.read( &mut read ).await.expect( "read" );

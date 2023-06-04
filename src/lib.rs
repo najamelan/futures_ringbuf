@@ -1,6 +1,5 @@
-#![cfg_attr( nightly, feature(doc_cfg) )]
-#![cfg_attr( nightly, cfg_attr( nightly, doc = include_str!("../README.md") ))]
-#![ doc = "" ] // empty doc line to handle missing doc warning when the feature is missing.
+#![ cfg_attr( nightly, feature(doc_cfg) ) ]
+#![ doc = include_str!("../README.md") ]
 
 #![ doc    ( html_root_url = "https://docs.rs/futures_ringbuf" ) ]
 #![ deny   ( missing_docs                                      ) ]
@@ -23,20 +22,18 @@
 
 
 mod ring_buffer ;
-pub use self::ring_buffer ::* ;
+pub use self::ring_buffer::* ;
 
-mod async_read;
-mod async_write;
-mod endpoint;
+mod async_read  ;
+mod async_write ;
+mod endpoint    ;
 
-pub use async_read ::*;
-pub use async_write::*;
-pub use endpoint   ::*;
+pub use endpoint::*;
 
-#[ cfg( feature = "sketchy" ) ] mod dictator;
-#[ cfg( feature = "sketchy" ) ] mod sketchy;
-#[ cfg( feature = "sketchy" ) ] pub use dictator::*;
-#[ cfg( feature = "sketchy" ) ] pub use sketchy::*;
+#[ cfg( feature = "sketchy" ) ] mod dictator        ;
+#[ cfg( feature = "sketchy" ) ] mod sketchy         ;
+#[ cfg( feature = "sketchy" ) ] pub use dictator::* ;
+#[ cfg( feature = "sketchy" ) ] pub use sketchy::*  ;
 
 
 // External dependencies
@@ -45,12 +42,12 @@ mod import
 {
 	pub(crate) use
 	{
-		std         :: { fmt, task::Waker                                 } ,
-		ringbuf     :: { RingBuffer as SyncRingBuffer, Producer, Consumer } ,
-		futures     :: { AsyncRead, AsyncWrite, AsyncReadExt              } ,
-		futures::io :: { ReadHalf, WriteHalf                              } ,
-		futures     :: { task::noop_waker                                 } ,
-		std         :: { io, pin::Pin, task::{ Context, Poll }            } ,
+		std         :: { fmt, task::Waker                      } ,
+		ringbuf     :: { HeapRb as SyncRingBuffer              } ,
+		futures     :: { AsyncRead, AsyncWrite, AsyncReadExt   } ,
+		futures::io :: { ReadHalf, WriteHalf                   } ,
+		futures     :: { task::noop_waker                      } ,
+		std         :: { io, pin::Pin, task::{ Context, Poll } } ,
 	};
 
 

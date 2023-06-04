@@ -24,7 +24,7 @@ package:
   # - `git tag x.x.x` with version number.
   # - `git push && git push --tags`
   #
-  version       : 0.3.1
+  version       : 0.4.0
   name          : futures_ringbuf
   authors       : [ Naja Melan <najamelan@autistici.org> ]
   description   : Mock Type implementing AsyncRead/AsyncWrite for testing and examples.
@@ -49,23 +49,23 @@ features:
 
   default: []
 
+  # This enables the Sketchy and Dictator types.
   sketchy: [ rand, rand_chacha, getrandom ]
 
 
 badges:
 
-  maintenance : { status     : actively-developed         }
-  travis-ci   : { repository : najamelan/futures_ringbuf  }
+  maintenance: { status     : actively-developed        }
+  travis-ci  : { repository : najamelan/futures_ringbuf }
 
 
 dependencies:
 
   # Public dependencies, bump major if changing any version number here.
   #
-  ringbuf    : ^0.2
-  futures    : ^0.3
-  log        : ^0.4
-  log-derive : ^0.4
+  ringbuf: ^0.3
+  futures: ^0.3
+  log    : ^0.4
 
   # private deps
   #
@@ -74,14 +74,14 @@ dependencies:
 
 dev-dependencies:
 
-  pretty_assertions   : ^0.7
-  futures-test        : ^0.3.0
-  asynchronous-codec  : ^0.6
-  assert_matches      : ^1
-  ergo-pin            : ^0.1
-  tokio               : { version: ^1, features: [ io-util ] }
-  tokio-util          : { version: ^0.6, features: [ codec, compat ] }
-  async-std           : { version: ^1  , features: [ attributes ] }
+  pretty_assertions : ^1
+  futures-test      : ^0.3
+  asynchronous-codec: ^0.6
+  assert_matches    : ^1
+  ergo-pin          : ^0.1
+  tokio             : { version: ^1, features: [ io-util ] }
+  tokio-util        : { version: ^0.7, features: [ codec, compat ] }
+  async-std         : { version: ^1  , features: [ attributes ] }
 
 build-dependencies:
 
