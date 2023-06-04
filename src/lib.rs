@@ -43,7 +43,7 @@ mod import
 	pub(crate) use
 	{
 		std         :: { fmt, task::Waker                                 } ,
-		ringbuf     :: { RingBuffer as SyncRingBuffer, Producer, Consumer } ,
+		ringbuf     :: { HeapRb as SyncRingBuffer, Producer, Consumer     } ,
 		futures     :: { AsyncRead, AsyncWrite, AsyncReadExt              } ,
 		futures::io :: { ReadHalf, WriteHalf                              } ,
 		futures     :: { task::noop_waker                                 } ,
