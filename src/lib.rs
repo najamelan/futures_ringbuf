@@ -42,12 +42,12 @@ mod import
 {
 	pub(crate) use
 	{
-		std         :: { fmt, task::Waker                                 } ,
-		ringbuf     :: { HeapRb as SyncRingBuffer, Producer, Consumer     } ,
-		futures     :: { AsyncRead, AsyncWrite, AsyncReadExt              } ,
-		futures::io :: { ReadHalf, WriteHalf                              } ,
-		futures     :: { task::noop_waker                                 } ,
-		std         :: { io, pin::Pin, task::{ Context, Poll }            } ,
+		std         :: { fmt, task::Waker                      } ,
+		ringbuf     :: { HeapRb as SyncRingBuffer              } ,
+		futures     :: { AsyncRead, AsyncWrite, AsyncReadExt   } ,
+		futures::io :: { ReadHalf, WriteHalf                   } ,
+		futures     :: { task::noop_waker                      } ,
+		std         :: { io, pin::Pin, task::{ Context, Poll } } ,
 	};
 
 

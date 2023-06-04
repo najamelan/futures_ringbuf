@@ -49,6 +49,7 @@ features:
 
   default: []
 
+  # This enables the Sketchy and Dictator types.
   sketchy: [ rand, rand_chacha, getrandom ]
 
 
@@ -62,10 +63,9 @@ dependencies:
 
   # Public dependencies, bump major if changing any version number here.
   #
-  ringbuf    : ^0.2
+  ringbuf    : ^0.3
   futures    : ^0.3
   log        : ^0.4
-  log-derive : ^0.4
 
   # private deps
   #
@@ -80,7 +80,7 @@ dev-dependencies:
   assert_matches      : ^1
   ergo-pin            : ^0.1
   tokio               : { version: ^1, features: [ io-util ] }
-  tokio-util          : { version: ^0.6, features: [ codec, compat ] }
+  tokio-util          : { version: ^0.7, features: [ codec, compat ] }
   async-std           : { version: ^1  , features: [ attributes ] }
 
 build-dependencies:

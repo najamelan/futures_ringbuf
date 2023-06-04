@@ -39,7 +39,7 @@ version = "^1"
 
 [dev-dependencies.tokio-util]
 features = ["codec", "compat"]
-version = "^0.6"
+version = "^0.7"
 
 [features]
 default = []
