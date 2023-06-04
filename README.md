@@ -62,8 +62,6 @@ Please check out the [changelog](https://github.com/najamelan/futures_ringbuf/bl
 
 This crate has few dependencies. Cargo will automatically handle its dependencies for you.
 
-There are no optional features.
-
 
 ## Security
 
